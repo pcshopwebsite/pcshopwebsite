@@ -24,4 +24,8 @@ hs_err_pid*
 replay_pid*
 
 # IDEs & editors
-/.idea
+.idea
+
+.mvn
+target/
+
