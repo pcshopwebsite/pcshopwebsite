@@ -10,9 +10,17 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org.pcshopwebsite</groupId>
-    <artifactId>backend</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>pcshop-service</artifactId>
+    <version>0.0.1</version>
     <dependencies>
+<!--        <dependency>-->
+<!--            <groupId>${project.groupId}</groupId>-->
+<!--            <artifactId>pcshop-spa</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--            <type>jar</type>-->
+<!--            &lt;!&ndash; we add optional to work with the backend package without building the frontend &ndash;&gt;-->
+<!--            <optional>true</optional>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
