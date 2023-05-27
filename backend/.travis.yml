@@ -1,0 +1,5 @@
+language: java
+jdk:
+  - eclipse-temurin:17-jdk-alpine
+script:
+  - ./mvnw clean install
