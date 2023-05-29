@@ -76,3 +76,6 @@ Arrange the product details, reviews, and ratings in a vertical format for easy 
 - Cart and Checkout Process:
 Simplify the cart page by condensing information and using collapsible sections if necessary.
 Streamline the checkout steps, displaying one step at a time to avoid overwhelming the user on smaller screens.
+
+### CI/CD architect/flow
+![img.png](ci-cd-flow.png)
