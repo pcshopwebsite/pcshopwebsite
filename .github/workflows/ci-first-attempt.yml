@@ -34,4 +34,4 @@ jobs:
         run: mvn clean package
       - name: Upload Artifact to S3
         working-directory: delivery/target
-        run: aws s3 cp PCShopApp-0.1.1.jar s3://${{ env.S3BUCKET }}
+        run: aws s3 cp PCShopApp-0.0.1.jar s3://${{ env.S3BUCKET }}
