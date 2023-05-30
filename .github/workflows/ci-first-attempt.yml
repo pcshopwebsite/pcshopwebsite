@@ -36,28 +36,28 @@ jobs:
         working-directory: delivery/target
         run: aws s3 cp PCShopApp-0.0.1.jar s3://${{ env.S3BUCKET }}
 
-deploy:
-  needs: build
-  runs-on: ubuntu-latest
-  environment: # Read more https://docs.github.com/en/actions/deployment/environments
-    name: Dev
-  permissions:
-    id-token: write
-    contents: read
-  steps:
-    - uses: actions/checkout@v3
-      name: Checkout Repository
-    - uses: aws-actions/configure-aws-credentials@v2
-      name: Configure AWS Credentials
-      with:
-        role-to-assume: ${{ secrets.IAMROLE_GITHUB }}
-        role-session-name: GitHub-Action-Role
-        aws-region: ${{ env.AWS_REGION }}
-    - run: |
-        echo "Deploying branch ${{ env.GITHUB_REF }} to the EC2 instance of the ${{ github.event.inputs.environment }} environment"
-        commit_hash=`git rev-parse HEAD`
-        aws deploy create-deployment \
-          --application-name CodeDeploy-PCShopApp \
-          --deployment-group-name CodeDeploy-PCShopApp-DeploymentGrp \
-          --description "Deploying the commit $commit_hash to the ${{ github.event.inputs.environment }} environment" \
-          --github-location repository=${{ github.repository }},commitId=$commit_hash
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: # Read more https://docs.github.com/en/actions/deployment/environments
+      name: Dev
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+        name: Checkout Repository
+      - uses: aws-actions/configure-aws-credentials@v2
+        name: Configure AWS Credentials
+        with:
+          role-to-assume: ${{ secrets.IAMROLE_GITHUB }}
+          role-session-name: GitHub-Action-Role
+          aws-region: ${{ env.AWS_REGION }}
+      - run: |
+          echo "Deploying branch ${{ env.GITHUB_REF }} to the EC2 instance of the ${{ github.event.inputs.environment }} environment"
+          commit_hash=`git rev-parse HEAD`
+          aws deploy create-deployment \
+            --application-name CodeDeploy-PCShopApp \
+            --deployment-group-name CodeDeploy-PCShopApp-DeploymentGrp \
+            --description "Deploying the commit $commit_hash to the ${{ github.event.inputs.environment }} environment" \
+            --github-location repository=${{ github.repository }},commitId=$commit_hash
