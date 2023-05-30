@@ -1,4 +1,5 @@
 #!/bin/bash
+set -xe
 
 APP_NAME="PCShopApp"
 JAR_FILE="PCShopApp-0.0.1.jar"

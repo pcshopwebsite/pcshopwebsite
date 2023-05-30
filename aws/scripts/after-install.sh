@@ -1,4 +1,5 @@
 #!/bin/bash
+set -xe
 
 # Check if Java 17 is already installed
 if ! command -v java &>/dev/null; then
