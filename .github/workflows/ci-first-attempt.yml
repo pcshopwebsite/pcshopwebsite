@@ -4,7 +4,7 @@ on:
 
 env:
   AWS_REGION: ap-southeast-1
-  S3BUCKET: arn:aws:s3:::pcshopwebsite-artifacts
+  S3BUCKET: pcshopwebsite-artifacts
 jobs:
   build:
     name: Build and Package
@@ -34,4 +34,4 @@ jobs:
         run: mvn clean package
       - name: Upload Artifact to S3
         working-directory: delivery/target
-        run: aws s3 cp PCShopApp-*.jar s3://${{ env.S3BUCKET }}
+        run: aws s3 cp PCShopApp-0.1.1.jar s3://${{ env.S3BUCKET }}
