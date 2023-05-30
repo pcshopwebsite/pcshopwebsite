@@ -1,16 +1,26 @@
-name: My pretty super duper workflow CI Hura!
+name: Build and deploy
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  workflow_dispatch: {} # Not sure what does this do, but let see the document later on
+
+env:
+  AWS_REGION: ap-southeast-1
+  S3BUCKET: arn:aws:s3:::pcshopwebsite-artifacts
 jobs:
   build:
+    name: Build and Package
     runs-on: ubuntu-latest
+    permissions: # Read more https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services
+      id-token: write # This is required for requesting the JWT
+      contents: read # This is required for actions/checkout
     steps:
       - uses: actions/checkout@v3
+        name: Checkout Repository
+      - uses: aws-actions/configure-aws-credentials@v2 # I think they've stated that v2 is released and v1 is no longer maintained
+        name: Configure AWS Credentials
+        with:
+          role-to-assume: ${{ secrets.IAMROLE_GITHUB }}
+          role-session-name: GitHub-Action-Role
+          aws-region: ${{ env.AWS_REGION }}
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
@@ -20,5 +30,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16.x
-      - name: Build with Maven
+      - name: Build with Maven and package to JAR
         run: mvn clean package
+      - name: Upload Artifact to S3
+        working-directory: delivery/target
+        run: aws s3 cp PCShopApp-*.jar s3://${{ env.S3BUCKET }}
