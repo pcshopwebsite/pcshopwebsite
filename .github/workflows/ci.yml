@@ -1,0 +1,28 @@
+name: Continuous integration
+on:
+  push: # trigger the workflow once there is change pushed to main branch
+    branches:
+      - main
+  pull_request: # trigger the workflow once there is a pull request created targeting main branch
+    branches:
+      - main
+jobs:
+  build:
+    name: Build and test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        name: Checkout Repository
+      - uses: actions/setup-java@v3
+        name: Set up JDK 17
+        with:
+          java-version: 17
+          distribution: 'temurin'
+      - uses: actions/setup-node@v3
+        name: Set up Node.js 16
+        with:
+          node-version: 16.x
+      - name: Run test with Maven
+        run: mvn clean test
+      - name: Build with Maven
+        run: mvn clean install

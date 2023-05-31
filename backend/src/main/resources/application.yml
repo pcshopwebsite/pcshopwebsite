@@ -1,18 +1,5 @@
-server:
-  port: 8080
-  error:
-    include-message: always
-
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5332/pcshop
-    username: stevenguyendev
-    password: password
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
-      show-sql: true
+spring.profiles: local
+spring.profiles.include: common, local
+---
+spring.profiles: dev
+spring.profiles.include: common, dev

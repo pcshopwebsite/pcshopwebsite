@@ -5,6 +5,8 @@ APP_NAME="PCShopApp"
 JAR_FILE="PCShopApp-0.0.1.jar"
 LOG_FILE="application.log"
 
+export JAVA_OPTS="-Dspring.profiles.active=dev"
+
 # Check if the app is already running
 if pgrep -f $JAR_FILE >/dev/null; then
     echo "The $APP_NAME is already running."
