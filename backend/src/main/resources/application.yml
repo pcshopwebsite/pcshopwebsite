@@ -1,5 +1,14 @@
-spring.profiles: local
-spring.profiles.include: common, local
----
-spring.profiles: dev
-spring.profiles.include: common, dev
+server:
+  port: 8080
+  error:
+    include-message: always
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+      show-sql: true
