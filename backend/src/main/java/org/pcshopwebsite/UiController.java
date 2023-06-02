@@ -3,7 +3,7 @@ package org.pcshopwebsite;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@Controller
+//@Controller
 public class UiController {
     /**
      * FIX WHITELABEL ERROR PAGE (404) WHEN REFRESHING THE PAGE
@@ -16,7 +16,7 @@ public class UiController {
      * effectively handling the request within the same server-side request context without a full browser redirect.
      *
      */
-    @GetMapping(value = "/{path:[^\\.]*}")
+//    @GetMapping(value = "/{path:[^\\.]*}")
     public String redirectApi() {
         return "forward:/";
     }
