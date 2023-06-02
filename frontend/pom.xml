@@ -10,6 +10,12 @@
     </parent>
     <artifactId>pcshop-spa</artifactId>
     <packaging>jar</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <app.name>pcshop-spa</app.name>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -49,7 +55,7 @@
         </plugins>
         <resources>
             <resource>
-                <directory>${basedir}/dist/pcshop-spa</directory>
+                <directory>${basedir}/dist/${app.name}</directory>
                 <targetPath>public</targetPath>
                 <filtering>false</filtering>
             </resource>
