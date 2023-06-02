@@ -56,7 +56,7 @@
         </plugins>
         <resources>
             <resource>
-                <directory>${basedir}/dist/${app.name}</directory>
+                <directory>${project.basedir}/dist/${app.name}</directory>
                 <targetPath>public</targetPath>
                 <filtering>false</filtering>
             </resource>
