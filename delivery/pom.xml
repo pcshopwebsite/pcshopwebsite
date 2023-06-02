@@ -8,8 +8,10 @@
         <artifactId>pcshop</artifactId>
         <version>0.0.1</version>
     </parent>
+
     <artifactId>pcshop-website</artifactId>
     <packaging>jar</packaging>
+
     <dependencies>
         <dependency>
             <groupId>org.pcshopwebsite</groupId>

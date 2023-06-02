@@ -3,24 +3,16 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.0</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>org.pcshopwebsite</groupId>
+        <artifactId>pcshop</artifactId>
+        <version>0.0.1</version>
     </parent>
-    <groupId>org.pcshopwebsite</groupId>
+
     <artifactId>pcshop-service</artifactId>
-    <version>0.0.1</version>
+
     <dependencies>
-<!--        <dependency>-->
-<!--            <groupId>${project.groupId}</groupId>-->
-<!--            <artifactId>pcshop-spa</artifactId>-->
-<!--            <version>${project.version}</version>-->
-<!--            <type>jar</type>-->
-<!--            &lt;!&ndash; we add optional to work with the backend package without building the frontend &ndash;&gt;-->
-<!--            <optional>true</optional>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
