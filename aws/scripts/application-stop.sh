@@ -1,6 +1,6 @@
 #!/bin/bash
 set -xe
-
+echo "$(date) - Starting the application-stop script" >> command-execution.log
 APP_NAME="PCShopApp"
 JAR_FILE="PCShopApp-0.0.1.jar"
 

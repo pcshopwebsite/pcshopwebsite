@@ -1,6 +1,6 @@
 #!/bin/bash
 set -xe
-
+echo "$(date) - Starting the application-start script" >> command-execution.log
 APP_NAME="PCShopApp"
 JAR_FILE="PCShopApp-0.0.1.jar"
 LOG_FILE="application.log"
@@ -8,7 +8,11 @@ LOG_FILE="application.log"
 # Check if the app is already running
 if pgrep -f $JAR_FILE >/dev/null; then
     echo "The $APP_NAME is already running. Will terminate"
-    ./application-stop.sh
+    # Find and kill the app process
+    PID=$(pgrep -f $JAR_FILE)
+    kill $PID
+
+    echo "Stopping $APP_NAME (PID: $PID)..."
 fi
 
 # Start the app in the background

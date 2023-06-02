@@ -1,6 +1,6 @@
 #!/bin/bash
 set -xe
-
+echo "$(date) - Starting the after-install script" >> command-execution.log
 # Check if Java 17 is already installed
 if ! command -v java &>/dev/null; then
     echo "Java is not installed. Installing Java 17..."
