@@ -34,7 +34,7 @@ jobs:
           java-version: 17
           maven-version: 3.9.2
       - name: Build with Maven and package to JAR
-        run: mvn clean package
+        run: mvn clean package -X
       - name: Upload Artifact to S3
         working-directory: delivery/target
         run: aws s3 cp PCShopApp-0.0.1.jar s3://${{ env.S3BUCKET }}
