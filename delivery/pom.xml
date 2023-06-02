@@ -16,11 +16,11 @@
             <artifactId>pcshop-service</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.pcshopwebsite</groupId>
-            <artifactId>pcshop-spa</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.pcshopwebsite</groupId>-->
+<!--            <artifactId>pcshop-spa</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
     </dependencies>
     <build>
         <plugins>
