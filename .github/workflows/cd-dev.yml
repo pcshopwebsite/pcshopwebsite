@@ -28,6 +28,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16.x
+      - name: Setup Maven Action
+        uses: s4u/setup-maven-action@v1.7.0
+        with:
+          java-version: 17
+          maven-version: 3.9.2
       - name: Build frontend with Node.js
         run: |
           cd frontend
@@ -35,12 +40,6 @@ jobs:
           npm run build
           ls -la dist/
           ls -la dist/pcshop-spa
-          cd -
-      - name: Setup Maven Action
-        uses: s4u/setup-maven-action@v1.7.0
-        with:
-          java-version: 17
-          maven-version: 3.9.2
       - name: Build with Maven and package to JAR
         run: |
           ls -la frontend/dist/
