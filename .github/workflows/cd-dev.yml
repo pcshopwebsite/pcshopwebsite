@@ -34,13 +34,18 @@ jobs:
           npm install
           npm run build
           ls -la dist/
+          ls -la dist/pcshop-spa
+          cd -
       - name: Setup Maven Action
         uses: s4u/setup-maven-action@v1.7.0
         with:
           java-version: 17
           maven-version: 3.9.2
       - name: Build with Maven and package to JAR
-        run: mvn clean package -X
+        run: |
+          ls -la frontend/dist/
+          ls -la frontend/dist/pcshop-spa
+          mvn clean package -X
       - name: Upload Artifact to S3
         working-directory: delivery/target
         run: aws s3 cp PCShopApp-0.0.1.jar s3://${{ env.S3BUCKET }}
