@@ -28,6 +28,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16.x
+      - name: Build frontend with Node.js
+        run: |
+          cd frontend
+          npm install
+          npm run build
       - name: Setup Maven Action
         uses: s4u/setup-maven-action@v1.7.0
         with:
