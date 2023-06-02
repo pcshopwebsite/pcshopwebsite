@@ -38,13 +38,8 @@ jobs:
           cd frontend
           npm install
           npm run build
-          ls -la dist/
-          ls -la dist/pcshop-spa
       - name: Build with Maven and package to JAR
-        run: |
-          ls -la frontend/dist/
-          ls -la frontend/dist/pcshop-spa
-          mvn clean package -X
+        run: mvn clean package
       - name: Upload Artifact to S3
         working-directory: delivery/target
         run: aws s3 cp PCShopApp-0.0.1.jar s3://${{ env.S3BUCKET }}
