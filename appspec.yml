@@ -9,7 +9,7 @@ permissions:
       owner: root
       group: root
       mode: 755
-hooks:
+hooks: # Hooks are executed at /opt/codedeploy-agent/
   ApplicationStop:
     - location: aws/scripts/application-stop.sh
       timeout: 300
