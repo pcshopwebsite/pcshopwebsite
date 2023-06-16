@@ -1,4 +1,4 @@
-package org.pcshopwebsite;
+package org.stevenguyendev.pcshopwebsite;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -23,6 +23,12 @@
             <artifactId>pcshop-spa</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <version>1.17.6</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -38,7 +44,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>org.pcshopwebsite.PCShopApp</mainClass>
+                    <mainClass>org.stevenguyendev.pcshopwebsite.PCShopApp</mainClass>
                     <finalName>PCShopApp-${project.version}</finalName>
                     <skip>false</skip>
                 </configuration>
