@@ -39,7 +39,7 @@ jobs:
           npm install
           npm run build
       - name: Build with Maven and package to JAR
-        run: mvn clean package
+        run: mvn clean package -ntp
       - name: Upload Artifact to S3
         working-directory: delivery/target
         run: aws s3 cp PCShopApp-0.0.1.jar s3://${{ env.S3BUCKET }}
