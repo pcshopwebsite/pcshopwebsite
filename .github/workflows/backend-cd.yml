@@ -1,21 +1,36 @@
-name: Build and deploy
+name: Continuous Delivery Backend
 on:
   push: # trigger the workflow once there is change pushed to main branch
     branches:
       - main
-      - feat**
+    paths:
+      - backend/**
   workflow_dispatch: {} # Not sure what does this do, but let see the document later on
 
 env:
   AWS_REGION: ap-southeast-1
   S3BUCKET: pcshopwebsite-artifacts
 jobs:
-  build:
+  build-and-test:
+    name: Build and test pcshop backend
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:14.1
+        env:
+          POSTGRES_USER: stevenguyendev
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: pcshop
+        ports:
+          - 5332:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     defaults:
       run:
         working-directory: ./backend
-    name: Build and Package
-    runs-on: ubuntu-latest
     permissions: # Read more https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services
       id-token: write # This is required for requesting the JWT
       contents: read # This is required for actions/checkout
@@ -49,7 +64,7 @@ jobs:
       - name: Build with Maven and push to Docker Hub
         run: mvn -ntp -B verify -Ddocker.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}} jib:build
   deploy:
-    needs: build
+    needs: build-and-test
     runs-on: ubuntu-latest
     environment: # Read more https://docs.github.com/en/actions/deployment/environments
       name: Dev
@@ -66,7 +81,7 @@ jobs:
         with:
           task-definition: EcsTask.json
           container-name: pcshop-api
-          image: stevenguyendev/pcshop-api:${{steps.build-number.outputs.BUILD_NUMBER}}
+          image: stevenguyendev/pcshop-api:${{build-and-test.steps.build-number.outputs.BUILD_NUMBER}}
           environment-variables: "SPRING_PROFILES_ACTIVE=dev"
       - name: Inspect EcsTask.json after update
         run: |
