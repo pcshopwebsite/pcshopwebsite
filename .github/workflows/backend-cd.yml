@@ -34,6 +34,8 @@ jobs:
     permissions: # Read more https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services
       id-token: write # This is required for requesting the JWT
       contents: read # This is required for actions/checkout
+    outputs:
+      BUILD_NUMBER: ${{ steps.build-number.outputs.BUILD_NUMBER }}
     steps:
       - uses: actions/checkout@v3
         name: Checkout Repository
@@ -81,7 +83,7 @@ jobs:
         with:
           task-definition: EcsTask.json
           container-name: pcshop-api
-          image: stevenguyendev/pcshop-api:${{build-and-test.steps.build-number.outputs.BUILD_NUMBER}}
+          image: stevenguyendev/pcshop-api:${{needs.build-and-test.outputs.BUILD_NUMBER}}
           environment-variables: "SPRING_PROFILES_ACTIVE=dev"
       - name: Inspect EcsTask.json after update
         run: |
