@@ -73,13 +73,11 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    defaults:
-      run:
-        working-directory: .
     steps:
       - name: Inspect EcsTask.json
         run: |
           echo "EcsTask.json before updating tag"
+          ls -la
           cat EcsTask.json
       - name: Update EcsTask.json
         uses: aws-actions/amazon-ecs-render-task-definition@v1
