@@ -1,13 +1,15 @@
-name: Continuous integration
+name: Continuous Integration Backend
 on:
-  pull_request: # trigger the workflow once there is a pull request created targeting main branch
-    branches:
-      - main
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
     paths:
       - backend/**
 jobs:
   build:
-    name: Build and test backend
+    name: Build and test pcshop backend
     runs-on: ubuntu-latest
     services:
       postgres:
