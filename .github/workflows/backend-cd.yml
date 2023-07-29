@@ -11,9 +11,11 @@ env:
   AWS_REGION: ap-southeast-1
   S3BUCKET: pcshopwebsite-artifacts
 jobs:
-  build-and-test:
-    name: Build and test pcshop backend
+  deploy-dev:
+    name: Deploy to Dev
     runs-on: ubuntu-latest
+    environment: # Read more https://docs.github.com/en/actions/deployment/environments
+      name: Dev
     services:
       postgres:
         image: postgres:14.1
@@ -34,8 +36,6 @@ jobs:
     permissions: # Read more https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services
       id-token: write # This is required for requesting the JWT
       contents: read # This is required for actions/checkout
-    outputs:
-      BUILD_NUMBER: ${{ steps.build-number.outputs.BUILD_NUMBER }}
     steps:
       - uses: actions/checkout@v3
         name: Checkout Repository
@@ -65,33 +65,24 @@ jobs:
         run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
       - name: Build with Maven and push to Docker Hub
         run: mvn -ntp -B verify -Ddocker.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}} jib:build
-  deploy:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    environment: # Read more https://docs.github.com/en/actions/deployment/environments
-      name: Dev
-    permissions:
-      id-token: write
-      contents: read
-    steps:
       - name: Inspect EcsTask.json
         run: |
           echo "EcsTask.json before updating tag"
-          ls -la
-          cat EcsTask.json
+          ls -la ../
+          cat ../EcsTask.json
       - name: Update EcsTask.json
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: EcsTask.json
+          task-definition: ../EcsTask.json
           container-name: pcshop-api
-          image: stevenguyendev/pcshop-api:${{needs.build-and-test.outputs.BUILD_NUMBER}}
+          image: stevenguyendev/pcshop-api:${{steps.build-number.outputs.BUILD_NUMBER}}
           environment-variables: "SPRING_PROFILES_ACTIVE=dev"
       - name: Inspect EcsTask.json after update
         run: |
           echo "EcsTask.json after updating tag"
-          cat EcsTask.json
+          cat ../EcsTask.json
       - name: Deploy to ECS
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: EcsTask.json
+          task-definition: ../EcsTask.json
           cluster: MyCluster
