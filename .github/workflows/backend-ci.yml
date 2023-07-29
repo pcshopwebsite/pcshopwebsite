@@ -1,15 +1,31 @@
 name: Continuous integration
 on:
-  push: # trigger the workflow once there is change pushed to main branch
-    branches:
-      - main
   pull_request: # trigger the workflow once there is a pull request created targeting main branch
     branches:
       - main
+    paths:
+      - backend/**
 jobs:
   build:
-    name: Build and test
+    name: Build and test backend
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:14.1
+        env:
+          POSTGRES_USER: stevenguyendev
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: pcshop
+        ports:
+          - 5332:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    defaults:
+      run:
+        working-directory: ./backend
     steps:
       - uses: actions/checkout@v3
         name: Checkout Repository
@@ -18,10 +34,7 @@ jobs:
         with:
           java-version: 17
           distribution: 'temurin'
-      - uses: actions/setup-node@v3
-        name: Set up Node.js 16
-        with:
-          node-version: 16.x
+          cache: 'maven'
       - name: Build with Maven
         run: mvn compile -ntp
       - name: Run UT and IT tests with Maven

@@ -1,0 +1,74 @@
+name: Build and deploy
+on:
+  push: # trigger the workflow once there is change pushed to main branch
+    branches:
+      - main
+  workflow_dispatch: {} # Not sure what does this do, but let see the document later on
+
+env:
+  AWS_REGION: ap-southeast-1
+  S3BUCKET: pcshopwebsite-artifacts
+jobs:
+  build:
+    name: Build and Package
+    runs-on: ubuntu-latest
+    permissions: # Read more https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services
+      id-token: write # This is required for requesting the JWT
+      contents: read # This is required for actions/checkout
+    steps:
+      - uses: actions/checkout@v3
+        name: Checkout Repository
+      - uses: aws-actions/configure-aws-credentials@v2
+        name: Configure AWS Credentials
+        with:
+          role-to-assume: ${{ secrets.IAMROLE_GITHUB }}
+          role-session-name: GitHub-Action-Role
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Set up Node.js 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+      - name: Set build number
+        id: build-number
+        run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
+      - name: Build with Maven and push to Docker Hub
+        run: mvn -ntp -B verify -Ddocker.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}} jib:build
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: # Read more https://docs.github.com/en/actions/deployment/environments
+      name: Dev
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Inspect EcsTask.json
+        run: |
+          echo "EcsTask.json before updating tag"
+          cat ../../EcsTask.json
+      - name: Update EcsTask.json
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ../../EcsTask.json
+          container-name: pcshop-api
+          image: stevenguyendev/pcshop-api:${{steps.build-number.outputs.BUILD_NUMBER}}
+          environment-variables: "SPRING_PROFILES_ACTIVE=dev"
+        run: |
+          echo "EcsTask.json after updating tag"
+          cat ../../EcsTask.json
+      - name: Deploy to ECS
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ../../EcsTask.json
+          cluster: MyCluster

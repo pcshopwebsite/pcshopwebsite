@@ -1,0 +1,39 @@
+{
+  "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:562750393901:task-definition/pcshop:1",
+  "containerDefinitions": [
+    {
+      "name": "pcshop-api",
+      "image": "stevenguyendev/pcshop-api:18.06.2023.03.05.48",
+      "cpu": 0,
+      "memory": 512,
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "hostPort": 80,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "environment": [
+        {
+          "name": "SPRING_PROFILES_ACTIVE",
+          "value": "dev"
+        }
+      ],
+      "mountPoints": [],
+      "volumesFrom": []
+    }
+  ],
+  "family": "pcshop",
+  "revision": 1,
+  "volumes": [],
+  "status": "ACTIVE",
+  "placementConstraints": [],
+  "compatibilities": [
+    "EXTERNAL",
+    "EC2"
+  ],
+  "registeredAt": "2023-07-23T06:19:48.729Z",
+  "registeredBy": "arn:aws:iam::562750393901:user/pcshopadmin",
+  "tags": []
+}
