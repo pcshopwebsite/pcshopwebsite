@@ -11,6 +11,9 @@ env:
   S3BUCKET: pcshopwebsite-artifacts
 jobs:
   build:
+    defaults:
+      run:
+        working-directory: ./backend
     name: Build and Package
     runs-on: ubuntu-latest
     permissions: # Read more https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services
@@ -57,20 +60,20 @@ jobs:
       - name: Inspect EcsTask.json
         run: |
           echo "EcsTask.json before updating tag"
-          cat ../../EcsTask.json
+          cat EcsTask.json
       - name: Update EcsTask.json
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: ../../EcsTask.json
+          task-definition: EcsTask.json
           container-name: pcshop-api
           image: stevenguyendev/pcshop-api:${{steps.build-number.outputs.BUILD_NUMBER}}
           environment-variables: "SPRING_PROFILES_ACTIVE=dev"
       - name: Inspect EcsTask.json after update
         run: |
           echo "EcsTask.json after updating tag"
-          cat ../../EcsTask.json
+          cat EcsTask.json
       - name: Deploy to ECS
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: ../../EcsTask.json
+          task-definition: EcsTask.json
           cluster: MyCluster
