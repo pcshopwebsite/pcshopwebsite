@@ -9,7 +9,7 @@ on:
       - backend/**
 jobs:
   build:
-    name: Build and test backend
+    name: Build and test pcshop backend
     runs-on: ubuntu-latest
     services:
       postgres:
