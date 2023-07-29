@@ -73,7 +73,7 @@ jobs:
       - name: Update EcsTask.json
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: ../EcsTask.json
+          task-definition: EcsTask.json # the actions doesn't obey working-directory setup above
           container-name: pcshop-api
           image: stevenguyendev/pcshop-api:${{steps.build-number.outputs.BUILD_NUMBER}}
           environment-variables: "SPRING_PROFILES_ACTIVE=dev"
