@@ -3,6 +3,7 @@ on:
   push: # trigger the workflow once there is change pushed to main branch
     branches:
       - main
+      - feat**
   workflow_dispatch: {} # Not sure what does this do, but let see the document later on
 
 env:
