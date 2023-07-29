@@ -64,6 +64,7 @@ jobs:
           container-name: pcshop-api
           image: stevenguyendev/pcshop-api:${{steps.build-number.outputs.BUILD_NUMBER}}
           environment-variables: "SPRING_PROFILES_ACTIVE=dev"
+      - name: Inspect EcsTask.json after update
         run: |
           echo "EcsTask.json after updating tag"
           cat ../../EcsTask.json
