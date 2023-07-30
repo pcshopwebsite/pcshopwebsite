@@ -2,7 +2,7 @@
     "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:562750393901:task-definition/pcshop-api:5",
     "containerDefinitions": [
         {
-            "name": "pcshop-api-latest",
+            "name": "pcshop-api",
             "image": "stevenguyendev/pcshop-api:30.07.2023.05.09.28",
             "cpu": 0,
             "memory": 512,
