@@ -77,7 +77,7 @@ jobs:
           NEW_TASK_INFO=$(aws ecs register-task-definition --cli-input-json "$json_string")
           echo $NEW_TASK_INFO
           NEW_REVISION=$(echo $NEW_TASK_INFO | jq -r '.taskDefinition.revision')
-          aws ecs run-task --cluster ${{ CLUSTER_NAME }} --task-definition ${{ env.TASK_DEFINITION }}:$NEW_REVISION --count 1
+          aws ecs run-task --cluster ${{ env.CLUSTER_NAME }} --task-definition ${{ env.TASK_DEFINITION }}:$NEW_REVISION --count 1
       - name: Run task to deploy container to ECS
         run: |
           aws ecs run-task --cluster ${{ env.CLUSTER_NAME }} --task-definition ${{ env.TASK_DEFINITION }} --count 1
