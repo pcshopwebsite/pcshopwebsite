@@ -10,7 +10,12 @@ on:
 env:
   AWS_REGION: ap-southeast-1
   S3BUCKET: pcshopwebsite-artifacts
-  TASK_DEFINITION: pcshop-api-task-definition.json
+  TASK_DEFINITION_FAMILY: pcshop-api
+  TASK_DEFINITION: pcshop-api:5
+  SPRING_PROFILES_ACTIVE_KEY: SPRING_PROFILES_ACTIVE
+  CONTAINER_NAME: pcshop-api
+  CONTAINER_URL: stevenguyendev/pcshop-api
+  CLUSTER_NAME: MyCluster
 jobs:
   deploy-dev:
     name: Deploy to Dev
@@ -66,24 +71,11 @@ jobs:
         run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
       - name: Build with Maven and push to Docker Hub
         run: mvn -ntp -B verify -Ddocker.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}} jib:build
-      - name: Inspect task definition before update
+      - name: Update task definition with new tag then describe
         run: |
-          echo "task definition before updating tag"
-          ls -la ../
-          cat ../${{ env.TASK_DEFINITION }}
-      - name: Update task definition
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: ${{ env.TASK_DEFINITION }} # the actions doesn't obey working-directory setup above
-          container-name: pcshop-api
-          image: stevenguyendev/pcshop-api:${{steps.build-number.outputs.BUILD_NUMBER}}
-          environment-variables: "SPRING_PROFILES_ACTIVE=dev"
-      - name: Inspect task definition after update
+          aws ecs update-task-definition --family ${{ env.TASK_DEFINITION_FAMILY }} --task-definition ${{ env.TASK_DEFINITION }} --container-definitions '[{"name":"${{ env.CONTAINER_NAME }}","environment":[{"name":"${{ env.SPRING_PROFILES_ACTIVE_KEY }}","value":"dev"}]}]'
+          aws ecs update-task-definition --family ${{ env.TASK_DEFINITION_FAMILY }} --task-definition ${{ env.TASK_DEFINITION }} --container-definitions '[{"name":"${{ env.CONTAINER_NAME }}","image":"${{ env.CONTAINER_URL }}: ${{ steps.build-number.outputs.BUILD_NUMBER }}"}]'
+          aws ecs describe-task-definition --task-definition ${{ env.TASK_DEFINITION }} --query taskDefinition
+      - name: Run task to deploy container to ECS
         run: |
-          echo "task definition after updating tag"
-          cat ../${{ env.TASK_DEFINITION }}
-      - name: Deploy to ECS
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-          task-definition: ${{ env.TASK_DEFINITION }}
-          cluster: MyCluster
+          aws ecs run-task --cluster ${{ env.CLUSTER_NAME }} --task-definition ${{ env.TASK_DEFINITION }} --count 1
