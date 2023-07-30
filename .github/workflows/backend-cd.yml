@@ -9,7 +9,6 @@ on:
 
 env:
   AWS_REGION: ap-southeast-1
-  S3BUCKET: pcshopwebsite-artifacts
   TASK_DEFINITION: pcshop-api
   TASK_DEFINITION_JSON_FILE: pcshop-api-task-definition.json
   CLUSTER_NAME: MyCluster
@@ -48,10 +47,6 @@ jobs:
           role-to-assume: ${{ secrets.IAMROLE_GITHUB }}
           role-session-name: GitHub-Action-Role
           aws-region: ${{ env.AWS_REGION }}
-      - name: Set up Node.js 16
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16.x
       - name: Setup Java
         uses: actions/setup-java@v3
         with:

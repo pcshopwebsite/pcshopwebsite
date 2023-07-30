@@ -3,13 +3,11 @@
         {
             "name": "pcshop-api",
             "image": "stevenguyendev/pcshop-api:30.07.2023.05.09.28",
-            "cpu": 0,
             "memory": 512,
             "portMappings": [
                 {
                     "containerPort": 8080,
-                    "hostPort": 80,
-                    "protocol": "tcp"
+                    "hostPort": 80
                 }
             ],
             "essential": true,
@@ -18,16 +16,9 @@
                     "name": "SPRING_PROFILES_ACTIVE",
                     "value": "local"
                 }
-            ],
-            "mountPoints": [],
-            "volumesFrom": []
+            ]
         }
     ],
     "family": "pcshop-api",
-    "executionRoleArn": "arn:aws:iam::562750393901:role/ecsTaskExecutionRole",
-    "volumes": [],
-    "placementConstraints": [],
-    "requiresCompatibilities": [
-        "EC2"
-    ]
+    "executionRoleArn": "arn:aws:iam::562750393901:role/ecsTaskExecutionRole"
 }
