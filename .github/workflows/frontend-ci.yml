@@ -23,6 +23,6 @@ jobs:
         with:
           node-version: 16.x
       - name: Build
-        run: npm build
+        run: npm run build
       - name: Test
-        run: npm test
+        run: npm run test
