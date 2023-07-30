@@ -138,33 +138,6 @@
             }
         }
     ],
-    "volumes": [
-        {
-            "name": "",
-            "host": {
-                "sourcePath": ""
-            },
-            "dockerVolumeConfiguration": {
-                "scope": "task",
-                "autoprovision": true,
-                "driver": "",
-                "driverOpts": {
-                    "KeyName": ""
-                },
-                "labels": {
-                    "KeyName": ""
-                }
-            },
-            "fsxWindowsFileServerVolumeConfiguration": {
-                "fileSystemId": "",
-                "rootDirectory": "",
-                "authorizationConfig": {
-                    "credentialsParameter": "",
-                    "domain": ""
-                }
-            }
-        }
-    ],
     "placementConstraints": [
         {
             "type": "memberOf",
