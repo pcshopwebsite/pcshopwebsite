@@ -11,7 +11,7 @@ env:
   AWS_REGION: ap-southeast-1
   S3BUCKET: pcshopwebsite-artifacts
   TASK_DEFINITION: pcshop-api
-  TASK_DEFINITION_JSON_FILE: ../pcshopp-api-task-definition.json
+  TASK_DEFINITION_JSON_FILE: pcshopp-api-task-definition.json
   CLUSTER_NAME: MyCluster
 jobs:
   deploy-dev:
@@ -70,6 +70,7 @@ jobs:
         run: mvn -ntp -B verify -Ddocker.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}} jib:build
       - name: Update task definition with new tag and environment variable then describe
         run: |
+          cd ..
           sed -i "s/\"image\": \"stevenguyendev\/pcshop-api:.*\"/\"image\": \"stevenguyendev\/pcshop-api:${{ steps.build-number.outputs.BUILD_NUMBER }}\"/" ${{ env.TASK_DEFINITION_JSON_FILE }}
           sed -i "/\"name\": \"SPRING_PROFILES_ACTIVE\"/{n;s/\"value\": \".*\"/\"value\": \"dev\"/;}" ${{ env.TASK_DEFINITION_JSON_FILE }}
           TEMPLATE_JSON_STRING=$(jq -c '.' ${{ env.TASK_DEFINITION_JSON_FILE }})
