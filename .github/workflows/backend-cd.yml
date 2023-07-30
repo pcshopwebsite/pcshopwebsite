@@ -10,11 +10,7 @@ on:
 env:
   AWS_REGION: ap-southeast-1
   S3BUCKET: pcshopwebsite-artifacts
-  TASK_DEFINITION_FAMILY: pcshop-api
-  TASK_DEFINITION: pcshop-api:5
-  SPRING_PROFILES_ACTIVE_KEY: SPRING_PROFILES_ACTIVE
-  CONTAINER_NAME: pcshop-api
-  CONTAINER_URL: stevenguyendev/pcshop-api
+  TASK_DEFINITION_JSON_FILE: pcshopp-api-task-definition.json
   CLUSTER_NAME: MyCluster
 jobs:
   deploy-dev:
@@ -71,11 +67,12 @@ jobs:
         run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
       - name: Build with Maven and push to Docker Hub
         run: mvn -ntp -B verify -Ddocker.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}} jib:build
-      - name: Update task definition with new tag then describe
+      - name: Update task definition with new tag and environment variable then describe
         run: |
-          aws ecs update-task-definition --family ${{ env.TASK_DEFINITION_FAMILY }} --task-definition ${{ env.TASK_DEFINITION }} --container-definitions '[{"name":"${{ env.CONTAINER_NAME }}","environment":[{"name":"${{ env.SPRING_PROFILES_ACTIVE_KEY }}","value":"dev"}]}]'
-          aws ecs update-task-definition --family ${{ env.TASK_DEFINITION_FAMILY }} --task-definition ${{ env.TASK_DEFINITION }} --container-definitions '[{"name":"${{ env.CONTAINER_NAME }}","image":"${{ env.CONTAINER_URL }}: ${{ steps.build-number.outputs.BUILD_NUMBER }}"}]'
-          aws ecs describe-task-definition --task-definition ${{ env.TASK_DEFINITION }} --query taskDefinition
+          sed -i "s/\"image\": \"stevenguyendev\/pcshop-api:.*\"/\"image\": \"stevenguyendev\/pcshop-api:${{ steps.build-number.outputs.BUILD_NUMBER }}\"/" ${{ env.TASK_DEFINITION_JSON_FILE }}
+          sed -i "/\"name\": \"SPRING_PROFILES_ACTIVE\"/{n;s/\"value\": \".*\"/\"value\": \"dev\"/;}" ${{ env.TASK_DEFINITION_JSON_FILE }}
+          json_string=$(jq -c '.' ${{ env.TASK_DEFINITION_JSON_FILE }})
+          aws ecs register-task-definition --cli-input-json "$json_string"
       - name: Run task to deploy container to ECS
         run: |
           aws ecs run-task --cluster ${{ env.CLUSTER_NAME }} --task-definition ${{ env.TASK_DEFINITION }} --count 1
