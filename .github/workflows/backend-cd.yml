@@ -65,24 +65,24 @@ jobs:
         run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
       - name: Build with Maven and push to Docker Hub
         run: mvn -ntp -B verify -Ddocker.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}} jib:build
-      - name: Inspect EcsTask.json
+      - name: Inspect ecs-task-definition.json
         run: |
-          echo "EcsTask.json before updating tag"
+          echo "ecs-task-definition.json before updating tag"
           ls -la ../
-          cat ../EcsTask.json
-      - name: Update EcsTask.json
+          cat ../ecs-task-definition.json
+      - name: Update ecs-task-definition.json
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: EcsTask.json # the actions doesn't obey working-directory setup above
+          task-definition: ecs-task-definition.json # the actions doesn't obey working-directory setup above
           container-name: pcshop-api
           image: stevenguyendev/pcshop-api:${{steps.build-number.outputs.BUILD_NUMBER}}
           environment-variables: "SPRING_PROFILES_ACTIVE=dev"
-      - name: Inspect EcsTask.json after update
+      - name: Inspect ecs-task-definition.json after update
         run: |
-          echo "EcsTask.json after updating tag"
-          cat ../EcsTask.json
+          echo "ecs-task-definition.json after updating tag"
+          cat ../ecs-task-definition.json
       - name: Deploy to ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          task-definition: EcsTask.json
+          task-definition: ecs-task-definition.json
           cluster: MyCluster
