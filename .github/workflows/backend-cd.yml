@@ -11,7 +11,7 @@ env:
   AWS_REGION: ap-southeast-1
   S3BUCKET: pcshopwebsite-artifacts
   TASK_DEFINITION: pcshop-api
-  TASK_DEFINITION_JSON_FILE: pcshopp-api-task-definition.json
+  TASK_DEFINITION_JSON_FILE: ../pcshopp-api-task-definition.json
   CLUSTER_NAME: MyCluster
 jobs:
   deploy-dev:
