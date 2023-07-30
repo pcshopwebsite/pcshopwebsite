@@ -26,11 +26,7 @@
     "family": "pcshop-api",
     "executionRoleArn": "arn:aws:iam::562750393901:role/ecsTaskExecutionRole",
     "volumes": [],
-    "status": "ACTIVE",
     "placementConstraints": [],
-    "compatibilities": [
-        "EC2"
-    ],
     "requiresCompatibilities": [
         "EC2"
     ]

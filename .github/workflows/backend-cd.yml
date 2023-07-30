@@ -73,9 +73,7 @@ jobs:
           cd ..
           sed -i "s/\"image\": \"stevenguyendev\/pcshop-api:.*\"/\"image\": \"stevenguyendev\/pcshop-api:${{ steps.build-number.outputs.BUILD_NUMBER }}\"/" ${{ env.TASK_DEFINITION_JSON_FILE }}
           sed -i "/\"name\": \"SPRING_PROFILES_ACTIVE\"/{n;s/\"value\": \".*\"/\"value\": \"dev\"/;}" ${{ env.TASK_DEFINITION_JSON_FILE }}
-          TEMPLATE_JSON_STRING=$(jq -c '.' ${{ env.TASK_DEFINITION_JSON_FILE }})
-          echo $TEMPLATE_JSON_STRING
-          NEW_TASK_INFO=$(aws ecs register-task-definition --cli-input-json "$json_string")
+          NEW_TASK_INFO=$(aws ecs register-task-definition --cli-input-json file://${{ env.TASK_DEFINITION_JSON_FILE }})
           echo $NEW_TASK_INFO
           NEW_REVISION=$(echo $NEW_TASK_INFO | jq -r '.taskDefinition.revision')
           aws ecs run-task --cluster ${{ env.CLUSTER_NAME }} --task-definition ${{ env.TASK_DEFINITION }}:$NEW_REVISION --count 1
