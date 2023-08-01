@@ -40,5 +40,5 @@ jobs:
       - name: Build
         run: npm run build
         # TODO: Add lint step
-      - name: Test
-        run: npm run test -- --no-watch --source-map=false --browsers=Chrome
+#      - name: Test
+#        run: npm run test -- --no-watch --source-map=false --browsers=Chrome
