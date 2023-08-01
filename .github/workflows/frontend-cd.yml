@@ -10,6 +10,7 @@ on:
 env:
   AWS_REGION: ap-southeast-1
   S3BUCKET: pcshop-dev
+  CLOUDFRONT_DISTRIBUTION_ID: E2TRC7ND4WHS1W
 jobs:
   deploy-dev:
     name: Deploy to Dev
@@ -56,3 +57,5 @@ jobs:
         run: aws s3 rm --recursive s3://${{ env.S3BUCKET }}
       - name: Upload to S3
         run: aws s3 cp --recursive dist/pcshop-spa/ s3://${{ env.S3BUCKET }}
+      - name: Invalidate CloudFront
+        run: aws cloudfront create-invalidation --distribution-id ${{ env.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
