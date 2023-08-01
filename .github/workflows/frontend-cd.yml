@@ -55,4 +55,4 @@ jobs:
       - name: Cleanup running resource files
         run: aws s3 rm --recursive s3://${{ env.S3BUCKET }}
       - name: Upload to S3
-        run: aws s3 cp --recursive frontend/dist/pcshop-spa/ s3://${{ env.S3BUCKET }}
+        run: aws s3 cp --recursive ./frontend/dist/pcshop-spa/ s3://${{ env.S3BUCKET }}
