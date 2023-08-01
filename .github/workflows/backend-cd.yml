@@ -9,11 +9,15 @@ on:
 
 env:
   AWS_REGION: ap-southeast-1
-  S3BUCKET: pcshopwebsite-artifacts
+  TASK_DEFINITION: pcshop-api
+  TASK_DEFINITION_JSON_FILE: pcshop-api-task-definition.json
+  CLUSTER_NAME: MyCluster
 jobs:
-  build-and-test:
-    name: Build and test pcshop backend
+  deploy-dev:
+    name: Deploy to Dev
     runs-on: ubuntu-latest
+    environment: # Read more https://docs.github.com/en/actions/deployment/environments
+      name: Dev
     services:
       postgres:
         image: postgres:14.1
@@ -43,10 +47,6 @@ jobs:
           role-to-assume: ${{ secrets.IAMROLE_GITHUB }}
           role-session-name: GitHub-Action-Role
           aws-region: ${{ env.AWS_REGION }}
-      - name: Set up Node.js 16
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16.x
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
@@ -63,32 +63,15 @@ jobs:
         run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
       - name: Build with Maven and push to Docker Hub
         run: mvn -ntp -B verify -Ddocker.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}} jib:build
-  deploy:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    environment: # Read more https://docs.github.com/en/actions/deployment/environments
-      name: Dev
-    permissions:
-      id-token: write
-      contents: read
-    steps:
-      - name: Inspect EcsTask.json
+      - name: Update task definition with new tag and environment variable then describe
         run: |
-          echo "EcsTask.json before updating tag"
-          cat EcsTask.json
-      - name: Update EcsTask.json
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: EcsTask.json
-          container-name: pcshop-api
-          image: stevenguyendev/pcshop-api:${{build-and-test.steps.build-number.outputs.BUILD_NUMBER}}
-          environment-variables: "SPRING_PROFILES_ACTIVE=dev"
-      - name: Inspect EcsTask.json after update
+          cd ..
+          sed -i "s/\"image\": \"stevenguyendev\/pcshop-api:.*\"/\"image\": \"stevenguyendev\/pcshop-api:${{ steps.build-number.outputs.BUILD_NUMBER }}\"/" ${{ env.TASK_DEFINITION_JSON_FILE }}
+          sed -i "/\"name\": \"SPRING_PROFILES_ACTIVE\"/{n;s/\"value\": \".*\"/\"value\": \"dev\"/;}" ${{ env.TASK_DEFINITION_JSON_FILE }}
+          NEW_TASK_INFO=$(aws ecs register-task-definition --cli-input-json file://${{ env.TASK_DEFINITION_JSON_FILE }})
+          echo $NEW_TASK_INFO
+          NEW_REVISION=$(echo $NEW_TASK_INFO | jq -r '.taskDefinition.revision')
+          aws ecs run-task --cluster ${{ env.CLUSTER_NAME }} --task-definition ${{ env.TASK_DEFINITION }}:$NEW_REVISION --count 1
+      - name: Run task to deploy container to ECS
         run: |
-          echo "EcsTask.json after updating tag"
-          cat EcsTask.json
-      - name: Deploy to ECS
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: EcsTask.json
-          cluster: MyCluster
+          aws ecs run-task --cluster ${{ env.CLUSTER_NAME }} --task-definition ${{ env.TASK_DEFINITION }} --count 1

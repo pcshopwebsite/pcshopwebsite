@@ -1,0 +1,24 @@
+{
+    "containerDefinitions": [
+        {
+            "name": "pcshop-api",
+            "image": "stevenguyendev/pcshop-api:30.07.2023.05.09.28",
+            "memory": 512,
+            "portMappings": [
+                {
+                    "containerPort": 8080,
+                    "hostPort": 80
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "SPRING_PROFILES_ACTIVE",
+                    "value": "local"
+                }
+            ]
+        }
+    ],
+    "family": "pcshop-api",
+    "executionRoleArn": "arn:aws:iam::562750393901:role/ecsTaskExecutionRole"
+}

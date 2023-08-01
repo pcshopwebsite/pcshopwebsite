@@ -7,6 +7,7 @@ on:
       - synchronize
     paths:
       - backend/**
+  workflow_dispatch: {}
 jobs:
   build:
     name: Build and test pcshop backend

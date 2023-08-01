@@ -1,0 +1,57 @@
+name: Continuous Delivery Frontend
+on:
+  push: # trigger the workflow once there is change pushed to main branch
+    branches:
+      - main
+    paths:
+      - frontend/**
+  workflow_dispatch: {} # Not sure what does this do, but let see the document later on
+
+env:
+  AWS_REGION: ap-southeast-1
+  S3BUCKET: pcshop-dev
+jobs:
+  deploy-dev:
+    name: Deploy to Dev
+    runs-on: ubuntu-latest
+    environment: # Read more https://docs.github.com/en/actions/deployment/environments
+      name: Dev
+    defaults:
+      run:
+        working-directory: ./frontend
+    permissions: # Read more https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services
+      id-token: write # This is required for requesting the JWT
+      contents: read # This is required for actions/checkout
+    steps:
+      - uses: actions/checkout@v3
+        name: Checkout Repository
+      - uses: aws-actions/configure-aws-credentials@v2 # I think they've stated that v2 is released and v1 is no longer maintained
+        name: Configure AWS Credentials
+        with:
+          role-to-assume: ${{ secrets.IAMROLE_GITHUB }}
+          role-session-name: GitHub-Action-Role
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Set up Node.js 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+      - name: Cache node modules
+        id: cache-node-modules
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: npm ci
+      - name: Build
+        run: npm run build -- --configuration=development
+      - name: Upload to S3
+        working-directory: dist/pcshop-spa
+        run: aws s3 cp * s3://${{ env.S3BUCKET }}
