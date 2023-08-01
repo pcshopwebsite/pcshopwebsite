@@ -10,6 +10,7 @@ on:
 env:
   AWS_REGION: ap-southeast-1
   S3BUCKET: pcshop-dev
+  CLOUDFRONT_DISTRIBUTION_ID: E2TRC7ND4WHS1W
 jobs:
   deploy-dev:
     name: Deploy to Dev
@@ -52,6 +53,9 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build -- --configuration=development
+      - name: Cleanup running resource files
+        run: aws s3 rm --recursive s3://${{ env.S3BUCKET }}
       - name: Upload to S3
-        working-directory: dist/pcshop-spa
-        run: aws s3 cp * s3://${{ env.S3BUCKET }}
+        run: aws s3 cp --recursive dist/pcshop-spa/ s3://${{ env.S3BUCKET }}
+      - name: Invalidate CloudFront
+        run: aws cloudfront create-invalidation --distribution-id ${{ env.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
