@@ -52,6 +52,7 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build -- --configuration=development
+      - name: Cleanup running resource files
+        run: aws s3 rm --recursive s3://${{ env.S3BUCKET }}
       - name: Upload to S3
-        working-directory:
-        run: aws s3 cp ./frontend/dist/pcshop-spa/* s3://${{ env.S3BUCKET }}
+        run: aws s3 cp --recursive frontend/dist/pcshop-spa/ s3://${{ env.S3BUCKET }}
