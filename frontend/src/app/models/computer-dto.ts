@@ -1,4 +1,4 @@
-export interface ProductDto {
+export interface ComputerDto {
     id?: number
     name?: string
     description?: string
