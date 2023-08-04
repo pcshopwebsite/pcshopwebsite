@@ -1,0 +1,69 @@
+<!-- Nav bar -->
+<nav id="nav">
+    <div class="hamburger" id="hamburger">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </div>
+    <a href="" class="logo">
+        <h1>
+            <span class="pc">PC</span><span class="shop">Shop</span><span>👍</span>
+        </h1>
+    </a>
+    <input type="text" class="search" id="search" placeholder="Macbook pro" />
+    <ul class="menu">
+        <li class="menu-item">
+            <a href="#" class="message" id="message">Message</a>
+        </li>
+        <li class="menu-item">
+            <a href="#" class="cart" id="cart">Cart</a>
+        </li>
+    </ul>
+</nav>
+<!-- Hero section -->
+<section id="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">PC Shop</h1>
+        <p class="hero-subtitle">Find the best deals for your next PC</p>
+        <a href="#" class="hero-btn">Shop now</a>
+    </div>
+</section>
+<!-- Computer list-->
+<section id="computers" *ngFor="let computer of computers$ | async as list">
+    <div class="computer-card">
+        <div class="computer-img">
+            <img [src]="computer.thumbnail" [alt]="computer.name" />
+        </div>
+        <div class="computer-info">
+            <h2>{{ computer.name }}</h2>
+            <p> {{ computer.description }}</p>
+            <p> ${{ computer.price }}</p>
+            <p> R{{ computer.rating }}</p>
+        </div>
+        <div class="rating">
+            <span class="stars">★★★★★</span>
+        </div>
+        <div class="actions">
+            <a href="#" class="btn">Add to cart</a>
+            <a href="#" class="btn">Buy now</a>
+            <a href="#" class="btn">Add to wishlist</a>
+        </div>
+    </div>
+</section>
+<!--Footer-->
+<footer>
+    <ul>
+        <li>
+            <a href="#">Home</a>
+        </li>
+        <li>
+            <a href="">Categories</a>
+        </li>
+        <li>
+            <a href="">Shops</a>
+        </li>
+        <li>
+            <a href="">Account</a>
+        </li>
+    </ul>
+</footer>
