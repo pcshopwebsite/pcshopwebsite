@@ -13,10 +13,16 @@
     <input type="text" class="search" id="search" placeholder="Macbook pro" />
     <ul class="menu">
         <li class="menu-item">
+            <button mat-icon-button arial-hidden="false" aria-label="Chat">
+                <mat-icon>chat</mat-icon>
+            </button>
             <a href="#" class="message" id="message">Message</a>
         </li>
         <li class="menu-item">
-            <a href="#" class="cart" id="cart">Cart</a>
+            <button mat-icon-button arial-hidden="false" aria-label="Shopping cart">
+                <mat-icon>shopping_cart</mat-icon>
+            </button>
+            <a href="#" class="cart" id="cart">Shopping cart</a>
         </li>
     </ul>
 </nav>
@@ -29,10 +35,10 @@
     </div>
 </section>
 <!-- Computer list-->
-<section id="computers" *ngFor="let computer of computers$ | async as list">
-    <div class="computer-card">
+<section id="computers">
+    <div class="computer-card" *ngFor="let computer of computers$ | async as list">
         <div class="computer-img">
-            <img [src]="computer.thumbnail" [alt]="computer.name" />
+            <img [src]="computer.thumbnail" [alt]="computer.name" onerror="this.onerror=null;this.src='/assets/images/macbookpro14inches.jpg'"/>
         </div>
         <div class="computer-info">
             <h2>{{ computer.name }}</h2>
@@ -44,9 +50,13 @@
             <span class="stars">★★★★★</span>
         </div>
         <div class="actions">
-            <a href="#" class="btn">Add to cart</a>
-            <a href="#" class="btn">Buy now</a>
-            <a href="#" class="btn">Add to wishlist</a>
+            <button mat-icon-button aria-hidden="false" aria-label="Add to cart">
+                <mat-icon>add_shopping_cart</mat-icon>
+            </button>
+            <button mat-icon-button aria-hidden="false" aria-label="Save">
+                <mat-icon>bookmark</mat-icon>
+            </button>
+            <button mat-button color="accent">Buy now</button>
         </div>
     </div>
 </section>
