@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AppConfigService } from './core/services/app-config.service';
 import { CoreModule } from './core/core.module';
+import { ShoppingCartComponent } from './shop/components/shopping-cart/shopping-cart.component';
 
 export function appInitializer(appConfigService: AppConfigService) {
   return () => {
@@ -17,6 +18,7 @@ export function appInitializer(appConfigService: AppConfigService) {
 @NgModule({
   declarations: [
     AppComponent,
+    ShoppingCartComponent,
   ],
   imports: [
     BrowserModule,

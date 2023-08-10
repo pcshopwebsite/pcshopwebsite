@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.stevenguyendev.pcshopwebsite.AbstractTestcontainers;
-import org.stevenguyendev.pcshopwebsite.computer.dto.ComputerDTO;
+import org.stevenguyendev.pcshopwebsite.dto.ComputerLiteDTO;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -30,19 +30,19 @@ public class ComputerControllerIT extends AbstractTestcontainers {
 
     @Test
     void givenComputersWithAccessGranted_WhenGetAllComputers_ThenReturnAllComputers() {
-        List<ComputerDTO> computers = webTestClient
+        List<ComputerLiteDTO> computers = webTestClient
                 .get()
                 .uri(BASE_URL)
                 .exchange()
                 .expectStatus()
                 .isOk()
-                .expectBodyList(ComputerDTO.class)
+                .expectBodyList(ComputerLiteDTO.class)
                 .returnResult()
                 .getResponseBody();
         assertThat(computers).isNotEmpty();
         assertThat(computers.size()).isLessThanOrEqualTo(50);
 
-        ComputerDTO computer = computers.get(0);
+        ComputerLiteDTO computer = computers.get(0);
         assertThat(computer.description()).isNotNull();
         assertThat(computer.price()).isNotNull();
         assertThat(computer.rating()).isNotNull();
@@ -57,12 +57,12 @@ public class ComputerControllerIT extends AbstractTestcontainers {
 
     @Test
     void givenComputersWithAccessGranted_WhenFilterComputerByName_ThenReturnMatchingComputers() {
-        List<ComputerDTO> computers = webTestClient.get()
+        List<ComputerLiteDTO> computers = webTestClient.get()
                                                    .uri(BASE_URL)
                                                    .exchange()
                                                    .expectStatus()
                                                    .isOk()
-                                                   .expectBodyList(ComputerDTO.class)
+                                                   .expectBodyList(ComputerLiteDTO.class)
                                                    .returnResult()
                                                    .getResponseBody();
         String searchTxt = computers.get(0)
@@ -71,76 +71,76 @@ public class ComputerControllerIT extends AbstractTestcontainers {
                                                            .name()
                                                            .length() - 1);
 
-        List<ComputerDTO> computers2 = webTestClient.get()
+        List<ComputerLiteDTO> computers2 = webTestClient.get()
                                                     .uri(BASE_URL + "?name=" + searchTxt)
                                                     .exchange()
                                                     .expectStatus()
                                                     .isOk()
-                                                    .expectBodyList(ComputerDTO.class)
+                                                    .expectBodyList(ComputerLiteDTO.class)
                                                     .returnResult()
                                                     .getResponseBody();
         assertThat(computers2).isNotEmpty();
 
-        ComputerDTO computer = computers2.get(0);
+        ComputerLiteDTO computer = computers2.get(0);
         assertThat(computer.name()).contains(searchTxt);
     }
 
     @Test
     void givenComputersWithAccessGranted_WhenFilterComputerByCategory_ThenReturnMatchingComputers() {
-        List<ComputerDTO> computers = webTestClient.get()
+        List<ComputerLiteDTO> computers = webTestClient.get()
                                                    .uri(BASE_URL + "?categories=" + DESKTOP_CATEGORY)
                                                    .exchange()
                                                    .expectStatus()
                                                    .isOk()
-                                                   .expectBodyList(ComputerDTO.class)
+                                                   .expectBodyList(ComputerLiteDTO.class)
                                                    .returnResult()
                                                    .getResponseBody();
         assertThat(computers).isNotEmpty();
 
-        ComputerDTO someComputer = computers.get(RANDOM.nextInt(0, computers.size()));
+        ComputerLiteDTO someComputer = computers.get(RANDOM.nextInt(0, computers.size()));
         assertThat(someComputer.category().name()).isEqualTo(DESKTOP_CATEGORY);
 
-        List<ComputerDTO> computers2 = webTestClient.get()
+        List<ComputerLiteDTO> computers2 = webTestClient.get()
                                                     .uri(BASE_URL + "?categories=" + DESKTOP_CATEGORY + "," + MACBOOK_CATEGORY)
                                                     .exchange()
                                                     .expectStatus()
                                                     .isOk()
-                                                    .expectBodyList(ComputerDTO.class)
+                                                    .expectBodyList(ComputerLiteDTO.class)
                                                     .returnResult()
                                                     .getResponseBody();
         assertThat(computers2).isNotEmpty();
 
-        ComputerDTO anotherComputer = computers2.get(RANDOM.nextInt(0, computers2.size()));
+        ComputerLiteDTO anotherComputer = computers2.get(RANDOM.nextInt(0, computers2.size()));
         assertThat(anotherComputer.category()
                                   .name()).isIn(DESKTOP_CATEGORY, MACBOOK_CATEGORY);
     }
 
     @Test
     void givenComputersWithAccessGranted_WhenFilterComputerByBrand_ThenReturnMatchingComputers() {
-        List<ComputerDTO> computers = webTestClient.get()
+        List<ComputerLiteDTO> computers = webTestClient.get()
                                                    .uri(BASE_URL + "?brands=" + LENOVO_BRAND)
                                                    .exchange()
                                                    .expectStatus()
                                                    .isOk()
-                                                   .expectBodyList(ComputerDTO.class)
+                                                   .expectBodyList(ComputerLiteDTO.class)
                                                    .returnResult()
                                                    .getResponseBody();
         assertThat(computers).isNotEmpty();
 
-        ComputerDTO someComputer = computers.get(RANDOM.nextInt(0, computers.size()));
+        ComputerLiteDTO someComputer = computers.get(RANDOM.nextInt(0, computers.size()));
         assertThat(someComputer.brand().name()).isEqualTo(LENOVO_BRAND);
 
-        List<ComputerDTO> computers2 = webTestClient.get()
+        List<ComputerLiteDTO> computers2 = webTestClient.get()
                                                     .uri(BASE_URL + "?brands=" + LENOVO_BRAND + "," + DELL_BRAND)
                                                     .exchange()
                                                     .expectStatus()
                                                     .isOk()
-                                                    .expectBodyList(ComputerDTO.class)
+                                                    .expectBodyList(ComputerLiteDTO.class)
                                                     .returnResult()
                                                     .getResponseBody();
         assertThat(computers2).isNotEmpty();
 
-        ComputerDTO anotherComputer = computers2.get(RANDOM.nextInt(0, computers2.size()));
+        ComputerLiteDTO anotherComputer = computers2.get(RANDOM.nextInt(0, computers2.size()));
         assertThat(anotherComputer.brand()
                                   .name()).isIn(LENOVO_BRAND, DELL_BRAND);
     }
@@ -149,36 +149,36 @@ public class ComputerControllerIT extends AbstractTestcontainers {
     void givenComputersWithAccessGranted_WhenFilterComputerByPrice_ThenReturnMatchingComputers() {
         BigDecimal minPrice = new BigDecimal(RANDOM.nextFloat(500.0f, 1000.0f));
         BigDecimal maxPrice = new BigDecimal(RANDOM.nextFloat(1000.0f, 1500.0f));
-        List<ComputerDTO> computers = webTestClient.get()
+        List<ComputerLiteDTO> computers = webTestClient.get()
                                                    .uri(BASE_URL + "?minPrice=" + minPrice)
                                                    .exchange()
                                                    .expectStatus()
                                                    .isOk()
-                                                   .expectBodyList(ComputerDTO.class)
+                                                   .expectBodyList(ComputerLiteDTO.class)
                                                    .returnResult()
                                                    .getResponseBody();
         assertThat(computers).isNotEmpty();
-        ComputerDTO computer = computers.get(RANDOM.nextInt(0, computers.size()));
+        ComputerLiteDTO computer = computers.get(RANDOM.nextInt(0, computers.size()));
         assertThat(computer.price()).isGreaterThanOrEqualTo(minPrice);
 
-        List<ComputerDTO> computers2 = webTestClient.get()
+        List<ComputerLiteDTO> computers2 = webTestClient.get()
                                                     .uri(BASE_URL + "?maxPrice=" + maxPrice)
                                                     .exchange()
                                                     .expectStatus()
                                                     .isOk()
-                                                    .expectBodyList(ComputerDTO.class)
+                                                    .expectBodyList(ComputerLiteDTO.class)
                                                     .returnResult()
                                                     .getResponseBody();
         assertThat(computers2).isNotEmpty();
-        ComputerDTO computer2 = computers2.get(RANDOM.nextInt(0, computers2.size()));
+        ComputerLiteDTO computer2 = computers2.get(RANDOM.nextInt(0, computers2.size()));
         assertThat(computer2.price()).isLessThanOrEqualTo(maxPrice);
 
-        List<ComputerDTO> computers3 = webTestClient.get()
+        List<ComputerLiteDTO> computers3 = webTestClient.get()
                                                     .uri(BASE_URL + "?minPrice=" + minPrice + "&maxPrice=" + maxPrice)
                                                     .exchange()
                                                     .expectStatus()
                                                     .isOk()
-                                                    .expectBodyList(ComputerDTO.class)
+                                                    .expectBodyList(ComputerLiteDTO.class)
                                                     .returnResult()
                                                     .getResponseBody();
         assertThat(computers3).isNotNull();
@@ -187,16 +187,16 @@ public class ComputerControllerIT extends AbstractTestcontainers {
     @Test
     void givenComputersWithAccessGranted_WhenFilterComputerByRating_ThenReturnMatchingComputers() {
         Float rating = 1.0f;
-        List<ComputerDTO> computers = webTestClient.get()
+        List<ComputerLiteDTO> computers = webTestClient.get()
                                                    .uri(BASE_URL + "?rating=" + rating)
                                                    .exchange()
                                                    .expectStatus()
                                                    .isOk()
-                                                   .expectBodyList(ComputerDTO.class)
+                                                   .expectBodyList(ComputerLiteDTO.class)
                                                    .returnResult()
                                                    .getResponseBody();
         assertThat(computers).isNotEmpty();
-        ComputerDTO computer = computers.get(RANDOM.nextInt(0, computers.size()));
+        ComputerLiteDTO computer = computers.get(RANDOM.nextInt(0, computers.size()));
         assertThat(computer.rating()).isGreaterThanOrEqualTo(rating);
     }
 
@@ -342,17 +342,17 @@ public class ComputerControllerIT extends AbstractTestcontainers {
     @Test
     void givenComputersWithAccessGranted_WhenGetComputersSortedByPriceAsc_ThenReturnComputersSortedByPriceAsc() {
 
-        List<ComputerDTO> computers4 = webTestClient.get()
+        List<ComputerLiteDTO> computers4 = webTestClient.get()
                                                     .uri(BASE_URL + "?sort=price&order=asc")
                                                     .exchange()
                                                     .expectStatus()
                                                     .isOk()
-                                                    .expectBodyList(ComputerDTO.class)
+                                                    .expectBodyList(ComputerLiteDTO.class)
                                                     .returnResult()
                                                     .getResponseBody();
         assertThat(computers4).isNotEmpty();
         List<BigDecimal> computerPrices2 = computers4.stream()
-                                                     .map(ComputerDTO::price)
+                                                     .map(ComputerLiteDTO::price)
                                                      .collect(Collectors.toList());
         assertThat(validatePriceOrderAsc(computerPrices2)).isEqualTo(true);
 
@@ -361,17 +361,17 @@ public class ComputerControllerIT extends AbstractTestcontainers {
     @Test
     void givenComputersWithAccessGranted_WhenGetComputersSortedByRatingDesc_ThenReturnComputersSortedByRatingDesc() {
 
-        List<ComputerDTO> computers5 = webTestClient.get()
+        List<ComputerLiteDTO> computers5 = webTestClient.get()
                                                     .uri(BASE_URL + "?sort=rating&order=desc")
                                                     .exchange()
                                                     .expectStatus()
                                                     .isOk()
-                                                    .expectBodyList(ComputerDTO.class)
+                                                    .expectBodyList(ComputerLiteDTO.class)
                                                     .returnResult()
                                                     .getResponseBody();
         assertThat(computers5).isNotEmpty();
         List<Float> computerRatings = computers5.stream()
-                                                .map(ComputerDTO::rating)
+                                                .map(ComputerLiteDTO::rating)
                                                 .collect(Collectors.toList());
         assertThat(validateRatingOrderDesc(computerRatings)).isEqualTo(true);
 
@@ -380,17 +380,17 @@ public class ComputerControllerIT extends AbstractTestcontainers {
     @Test
     void givenComputersWithAccessGranted_WhenGetComputersSortedByRatingAsc_ThenReturnComputersSortedByRatingAsc() {
 
-        List<ComputerDTO> computers6 = webTestClient.get()
+        List<ComputerLiteDTO> computers6 = webTestClient.get()
                                                     .uri(BASE_URL + "?sort=rating&order=asc")
                                                     .exchange()
                                                     .expectStatus()
                                                     .isOk()
-                                                    .expectBodyList(ComputerDTO.class)
+                                                    .expectBodyList(ComputerLiteDTO.class)
                                                     .returnResult()
                                                     .getResponseBody();
         assertThat(computers6).isNotEmpty();
         List<Float> computerRatings2 = computers6.stream()
-                                                 .map(ComputerDTO::rating)
+                                                 .map(ComputerLiteDTO::rating)
                                                  .collect(Collectors.toList());
         assertThat(validateRatingOrderAsc(computerRatings2)).isEqualTo(true);
 
@@ -399,17 +399,17 @@ public class ComputerControllerIT extends AbstractTestcontainers {
     @Test
     void givenComputersWithAccessGranted_WhenGetComputersSortedByUpdatedAtDesc_ThenReturnComputersSortedByUpdatedAtDesc() {
 
-        List<ComputerDTO> computers7 = webTestClient.get()
+        List<ComputerLiteDTO> computers7 = webTestClient.get()
                                                     .uri(BASE_URL + "?sort=updatedAt&order=desc")
                                                     .exchange()
                                                     .expectStatus()
                                                     .isOk()
-                                                    .expectBodyList(ComputerDTO.class)
+                                                    .expectBodyList(ComputerLiteDTO.class)
                                                     .returnResult()
                                                     .getResponseBody();
         assertThat(computers7).isNotEmpty();
         List<LocalDateTime> computerDates = computers7.stream()
-                                                      .map(ComputerDTO::updatedAt)
+                                                      .map(ComputerLiteDTO::updatedAt)
                                                       .collect(Collectors.toList());
         assertThat(validateDateOrderDesc(computerDates)).isEqualTo(true);
 
@@ -418,17 +418,17 @@ public class ComputerControllerIT extends AbstractTestcontainers {
     @Test
     void givenComputersWithAccessGranted_WhenGetComputersSortedByUpdatedAtAsc_ThenReturnComputersSortedByUpdatedAtAsc() {
 
-        List<ComputerDTO> computers8 = webTestClient.get()
+        List<ComputerLiteDTO> computers8 = webTestClient.get()
                                                     .uri(BASE_URL + "?sort=updatedAt&order=asc")
                                                     .exchange()
                                                     .expectStatus()
                                                     .isOk()
-                                                    .expectBodyList(ComputerDTO.class)
+                                                    .expectBodyList(ComputerLiteDTO.class)
                                                     .returnResult()
                                                     .getResponseBody();
         assertThat(computers8).isNotEmpty();
         List<LocalDateTime> computerDates2 = computers8.stream()
-                                                       .map(ComputerDTO::updatedAt)
+                                                       .map(ComputerLiteDTO::updatedAt)
                                                        .collect(Collectors.toList());
         assertThat(validateDateOrderAsc(computerDates2)).isEqualTo(true);
 
@@ -437,17 +437,17 @@ public class ComputerControllerIT extends AbstractTestcontainers {
     @Test
     void givenComputersWithAccessGranted_WhenGetComputersSortedBySomethingElse_ThenReturnComputersSortedByUpdatedAt() {
 
-        List<ComputerDTO> computers7 = webTestClient.get()
+        List<ComputerLiteDTO> computers7 = webTestClient.get()
                                                     .uri(BASE_URL)
                                                     .exchange()
                                                     .expectStatus()
                                                     .isOk()
-                                                    .expectBodyList(ComputerDTO.class)
+                                                    .expectBodyList(ComputerLiteDTO.class)
                                                     .returnResult()
                                                     .getResponseBody();
         assertThat(computers7).isNotEmpty();
         List<LocalDateTime> computerDates = computers7.stream()
-                                                      .map(ComputerDTO::updatedAt)
+                                                      .map(ComputerLiteDTO::updatedAt)
                                                       .collect(Collectors.toList());
         assertThat(validateDateOrderDesc(computerDates)).isEqualTo(true);
 
@@ -455,17 +455,17 @@ public class ComputerControllerIT extends AbstractTestcontainers {
 
     @Test
     void givenComputersWithAccessGranted_WhenFilterComputerWithSortAndOrder_ThenReturnSortedOrderedComputers() {
-        List<ComputerDTO> computers = webTestClient.get()
+        List<ComputerLiteDTO> computers = webTestClient.get()
                                                    .uri(BASE_URL + "?sort=price&order=desc")
                                                    .exchange()
                                                    .expectStatus()
                                                    .isOk()
-                                                   .expectBodyList(ComputerDTO.class)
+                                                   .expectBodyList(ComputerLiteDTO.class)
                                                    .returnResult()
                                                    .getResponseBody();
         assertThat(computers).isNotEmpty();
         List<BigDecimal> computerPrices = computers.stream()
-                                                    .map(ComputerDTO::price)
+                                                    .map(ComputerLiteDTO::price)
                                                     .collect(Collectors.toList());
         assertThat(validatePriceOrderDesc(computerPrices)).isEqualTo(true);
     }
@@ -473,12 +473,12 @@ public class ComputerControllerIT extends AbstractTestcontainers {
     @Test
     void givenComputersWithAccessGranted_WhenFilterComputerWithPageAndSize_ThenReturnComputersWithPageAndSize() {
 
-        List<ComputerDTO> computers = webTestClient.get()
+        List<ComputerLiteDTO> computers = webTestClient.get()
                                                    .uri(BASE_URL + "?page=0&size=2")
                                                    .exchange()
                                                    .expectStatus()
                                                    .isOk()
-                                                   .expectBodyList(ComputerDTO.class)
+                                                   .expectBodyList(ComputerLiteDTO.class)
                                                    .returnResult()
                                                    .getResponseBody();
         assertThat(computers).isNotEmpty();
@@ -487,22 +487,22 @@ public class ComputerControllerIT extends AbstractTestcontainers {
 
     @Test
     void givenComputersWithAccessGranted_WhenFilterComputerByBrandAndCategory_ThenReturnMatchingComputers() {
-        List<ComputerDTO> computers = webTestClient.get()
+        List<ComputerLiteDTO> computers = webTestClient.get()
                                                    .uri(BASE_URL + "?page=0&size=2")
                                                    .exchange()
                                                    .expectStatus()
                                                    .isOk()
-                                                   .expectBodyList(ComputerDTO.class)
+                                                   .expectBodyList(ComputerLiteDTO.class)
                                                    .returnResult()
                                                    .getResponseBody();
         String brand = computers.get(0).brand().name();
         String category = computers.get(0).category().name();
-        List<ComputerDTO> computers2 = webTestClient.get()
+        List<ComputerLiteDTO> computers2 = webTestClient.get()
                                                     .uri(BASE_URL + "?brands=" + brand + "&categories=" + category)
                                                     .exchange()
                                                     .expectStatus()
                                                     .isOk()
-                                                    .expectBodyList(ComputerDTO.class)
+                                                    .expectBodyList(ComputerLiteDTO.class)
                                                     .returnResult()
                                                     .getResponseBody();
         assertThat(computers2).isNotEmpty();
@@ -515,12 +515,12 @@ public class ComputerControllerIT extends AbstractTestcontainers {
         String brand = "Apple";
         String category = "Macbook";
         BigDecimal minPrice = BigDecimal.valueOf(700);
-        List<ComputerDTO> computers2 = webTestClient.get()
+        List<ComputerLiteDTO> computers2 = webTestClient.get()
                                                     .uri(BASE_URL + "?brands=" + brand + "&categories=" + category + "&minPrice=" + minPrice)
                                                     .exchange()
                                                     .expectStatus()
                                                     .isOk()
-                                                    .expectBodyList(ComputerDTO.class)
+                                                    .expectBodyList(ComputerLiteDTO.class)
                                                     .returnResult()
                                                     .getResponseBody();
         assertThat(computers2).isNotEmpty();
@@ -536,12 +536,12 @@ public class ComputerControllerIT extends AbstractTestcontainers {
         String category = "Macbook";
         BigDecimal minPrice = BigDecimal.valueOf(700);
         Float minRating = 4.0f;
-        List<ComputerDTO> computers2 = webTestClient.get()
+        List<ComputerLiteDTO> computers2 = webTestClient.get()
                                                     .uri(BASE_URL + "?brands=" + brand + "&categories=" + category + "&minPrice=" + minPrice + "&minRating=" + minRating)
                                                     .exchange()
                                                     .expectStatus()
                                                     .isOk()
-                                                    .expectBodyList(ComputerDTO.class)
+                                                    .expectBodyList(ComputerLiteDTO.class)
                                                     .returnResult()
                                                     .getResponseBody();
         assertThat(computers2).isNotEmpty();
@@ -558,12 +558,12 @@ public class ComputerControllerIT extends AbstractTestcontainers {
         String category = "Macbook";
         BigDecimal minPrice = BigDecimal.valueOf(700);
         Float minRating = 4.0f;
-        List<ComputerDTO> computers2 = webTestClient.get()
+        List<ComputerLiteDTO> computers2 = webTestClient.get()
                                                     .uri(BASE_URL + "?brands=" + brand + "&categories=" + category + "&minPrice=" + minPrice + "&minRating=" + minRating + "&sort=price&order=asc")
                                                     .exchange()
                                                     .expectStatus()
                                                     .isOk()
-                                                    .expectBodyList(ComputerDTO.class)
+                                                    .expectBodyList(ComputerLiteDTO.class)
                                                     .returnResult()
                                                     .getResponseBody();
         assertThat(computers2).isNotEmpty();
@@ -572,7 +572,7 @@ public class ComputerControllerIT extends AbstractTestcontainers {
         assertThat(computers2.get(0).price()).isGreaterThanOrEqualTo(minPrice);
         assertThat(computers2.get(0).rating()).isGreaterThanOrEqualTo(minRating);
         assertThat(validatePriceOrderAsc(computers2.stream()
-                                                   .map(ComputerDTO::price)
+                                                   .map(ComputerLiteDTO::price)
                                                    .collect(Collectors.toList()))).isEqualTo(true);
     }
 
