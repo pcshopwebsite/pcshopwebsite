@@ -38,7 +38,7 @@ public class ComputerService {
     }
 
     public Computer getComputerByIdOrName(String idOrName) {
-        return computerRepository.findComputerByIdOrName(idOrName)
+        return computerRepository.findComputerByIdOrName(idOrName, idOrName)
                                  .orElseThrow(
                                          () -> new ResourceNotFoundException("Computer with id or name " + idOrName + " not found")
                                  );

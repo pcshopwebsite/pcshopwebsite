@@ -16,6 +16,7 @@ import java.util.Set;
 public class Cart extends BaseAuditableEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
     /** Non-owning side of the relationship. */
@@ -24,7 +25,6 @@ public class Cart extends BaseAuditableEntity {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-
     private final Set<CartItem> cartItems = new HashSet<>();
 
     public void addCartItem(CartItem cartItem) {

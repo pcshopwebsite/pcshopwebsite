@@ -50,7 +50,6 @@ public class Computer extends BaseAuditableEntity {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    @JoinColumn(name = "computer_id", nullable = false)
     private final Set<Media> medias = new HashSet<>();
 
     @OneToMany(
@@ -58,7 +57,6 @@ public class Computer extends BaseAuditableEntity {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    @JoinColumn(name = "computer_id")
     private final Set<CartItem> cartItems = new HashSet<>();
 
     public void addMedia(Media mediaEntity) {

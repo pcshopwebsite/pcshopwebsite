@@ -15,9 +15,11 @@ import java.util.Objects;
 public class CartItem extends BaseAuditableEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cart_id")
     private Cart cart;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "computer_id")
     private Computer computer;
 
     private Integer quantity;

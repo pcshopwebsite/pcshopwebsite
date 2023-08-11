@@ -6,7 +6,7 @@ import org.stevenguyendev.pcshopwebsite.model.Computer;
 import java.util.Optional;
 
 public interface ComputerRepository extends JpaRepository<Computer, Long>, CustomComputerRepository {
-     Optional<Computer> findComputerByIdOrName(String idOrName);
+     Optional<Computer> findComputerByIdOrName(String id, String name);
      Optional<Computer> findComputerByName(String name);
      Optional<Computer> findComputerById(Long id);
 }
