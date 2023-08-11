@@ -65,16 +65,8 @@ CREATE INDEX IF NOT EXISTS idx_computer_brand_id ON computer (brand_id);
 -- Create cart table if not exists
 CREATE TABLE IF NOT EXISTS cart (
   id UUID PRIMARY KEY,
-  user_id UUID NOT NULL,
-                          created_at TIMESTAMP NOT NULL,
-                          updated_at TIMESTAMP NOT NULL,
-                          created_by VARCHAR(255),
-                          updated_by VARCHAR(255),
-  FOREIGN KEY (user_id) REFERENCES public.user (id)
+  FOREIGN KEY (id) REFERENCES public.user (id)
 );
-
--- Create index on cart table if not exists
-CREATE INDEX IF NOT EXISTS idx_cart_user_id ON cart (user_id);
 
 -- Create cart_item table if not exists
 CREATE TABLE IF NOT EXISTS cart_item (

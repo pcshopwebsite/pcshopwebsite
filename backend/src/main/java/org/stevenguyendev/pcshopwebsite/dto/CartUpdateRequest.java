@@ -1,8 +1,10 @@
 package org.stevenguyendev.pcshopwebsite.dto;
 
+import java.util.UUID;
+
 public record CartUpdateRequest(
-        Long cartId,
-        Long computerId,
+        UUID cartId,
+        UUID computerId,
         CartUpdateAction action,
         Integer quantity
 ) {

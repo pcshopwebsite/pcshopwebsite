@@ -15,6 +15,7 @@ import org.stevenguyendev.pcshopwebsite.repository.CartRepository;
 import org.stevenguyendev.pcshopwebsite.repository.UserRepository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -93,7 +94,7 @@ public class CartService {
         return cartRepository.save(cartEntity);
     }
 
-    public Cart getCart(Long cartId) {
+    public Cart getCart(UUID cartId) {
         Optional<Cart> cartEntity = cartRepository.findById(cartId);
         if (cartEntity.isEmpty()) {
             throw new ResourceNotFoundException("Cart not found for id " + cartId);

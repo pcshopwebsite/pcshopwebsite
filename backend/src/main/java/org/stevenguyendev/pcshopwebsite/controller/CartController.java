@@ -7,8 +7,10 @@ import org.stevenguyendev.pcshopwebsite.dto.mapper.CartDTOMapper;
 import org.stevenguyendev.pcshopwebsite.service.CartService;
 import org.stevenguyendev.pcshopwebsite.dto.CartUpdateRequest;
 
+import java.util.UUID;
+
 @RestController
-@RequestMapping("/api/carts")
+@RequestMapping("/api/v1/carts")
 public class CartController {
 
     private final CartService cartService;
@@ -20,7 +22,7 @@ public class CartController {
         this.cartDTOMapper = cartDTOMapper;
     }
     @GetMapping("/{cartId}")
-    public ResponseEntity<CartDTO> getCart(@PathVariable Long cartId)
+    public ResponseEntity<CartDTO> getCart(@PathVariable UUID cartId)
     {
         return ResponseEntity.ok(cartDTOMapper.apply(cartService.getCart(cartId)));
     }

@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "cart", schema = "public")
@@ -13,10 +14,14 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
-public class Cart extends BaseAuditableEntity {
+public class Cart {
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @Id
+    private UUID id;
+
+    @OneToOne
+    @JoinColumn(name = "id")
+    @MapsId
     private User user;
 
     /** Non-owning side of the relationship. */

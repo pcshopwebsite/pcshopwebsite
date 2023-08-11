@@ -20,14 +20,6 @@ public class User extends BaseAuditableEntity {
 
     private String password;
 
-    /** Non-owning side of the relationship. */
-    @OneToOne(
-            mappedBy = "user",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private Cart cart;
-
     @Override
     public String toString() {
         return "User{" +
