@@ -49,9 +49,7 @@ public class ComputerControllerIT extends AbstractTestcontainers {
         assertThat(computer.thumbnail()).isNotNull();
         assertThat(computer.thumbnail()).isNotEmpty();
         assertThat(computer.brand()).isNotNull();
-        assertThat(computer.brand().name()).isNotNull();
         assertThat(computer.category()).isNotNull();
-        assertThat(computer.category().name()).isNotNull();
         assertThat(computer.updatedAt()).isNotNull();
     }
 
@@ -98,7 +96,7 @@ public class ComputerControllerIT extends AbstractTestcontainers {
         assertThat(computers).isNotEmpty();
 
         ComputerLiteDTO someComputer = computers.get(RANDOM.nextInt(0, computers.size()));
-        assertThat(someComputer.category().name()).isEqualTo(DESKTOP_CATEGORY);
+        assertThat(someComputer.category()).isEqualTo(DESKTOP_CATEGORY);
 
         List<ComputerLiteDTO> computers2 = webTestClient.get()
                                                     .uri(BASE_URL + "?categories=" + DESKTOP_CATEGORY + "," + MACBOOK_CATEGORY)
@@ -111,8 +109,7 @@ public class ComputerControllerIT extends AbstractTestcontainers {
         assertThat(computers2).isNotEmpty();
 
         ComputerLiteDTO anotherComputer = computers2.get(RANDOM.nextInt(0, computers2.size()));
-        assertThat(anotherComputer.category()
-                                  .name()).isIn(DESKTOP_CATEGORY, MACBOOK_CATEGORY);
+        assertThat(anotherComputer.category()).isIn(DESKTOP_CATEGORY, MACBOOK_CATEGORY);
     }
 
     @Test
@@ -128,7 +125,7 @@ public class ComputerControllerIT extends AbstractTestcontainers {
         assertThat(computers).isNotEmpty();
 
         ComputerLiteDTO someComputer = computers.get(RANDOM.nextInt(0, computers.size()));
-        assertThat(someComputer.brand().name()).isEqualTo(LENOVO_BRAND);
+        assertThat(someComputer.brand()).isEqualTo(LENOVO_BRAND);
 
         List<ComputerLiteDTO> computers2 = webTestClient.get()
                                                     .uri(BASE_URL + "?brands=" + LENOVO_BRAND + "," + DELL_BRAND)
@@ -141,8 +138,7 @@ public class ComputerControllerIT extends AbstractTestcontainers {
         assertThat(computers2).isNotEmpty();
 
         ComputerLiteDTO anotherComputer = computers2.get(RANDOM.nextInt(0, computers2.size()));
-        assertThat(anotherComputer.brand()
-                                  .name()).isIn(LENOVO_BRAND, DELL_BRAND);
+        assertThat(anotherComputer.brand()).isIn(LENOVO_BRAND, DELL_BRAND);
     }
 
     @Test
@@ -495,8 +491,8 @@ public class ComputerControllerIT extends AbstractTestcontainers {
                                                    .expectBodyList(ComputerLiteDTO.class)
                                                    .returnResult()
                                                    .getResponseBody();
-        String brand = computers.get(0).brand().name();
-        String category = computers.get(0).category().name();
+        String brand = computers.get(0).brand();
+        String category = computers.get(0).category();
         List<ComputerLiteDTO> computers2 = webTestClient.get()
                                                     .uri(BASE_URL + "?brands=" + brand + "&categories=" + category)
                                                     .exchange()
@@ -506,8 +502,8 @@ public class ComputerControllerIT extends AbstractTestcontainers {
                                                     .returnResult()
                                                     .getResponseBody();
         assertThat(computers2).isNotEmpty();
-        assertThat(computers2.get(0).brand().name()).isEqualTo(brand);
-        assertThat(computers2.get(0).category().name()).isEqualTo(category);
+        assertThat(computers2.get(0).brand()).isEqualTo(brand);
+        assertThat(computers2.get(0).category()).isEqualTo(category);
     }
 
     @Test
@@ -524,8 +520,8 @@ public class ComputerControllerIT extends AbstractTestcontainers {
                                                     .returnResult()
                                                     .getResponseBody();
         assertThat(computers2).isNotEmpty();
-        assertThat(computers2.get(0).brand().name()).isEqualTo(brand);
-        assertThat(computers2.get(0).category().name()).isEqualTo(category);
+        assertThat(computers2.get(0).brand()).isEqualTo(brand);
+        assertThat(computers2.get(0).category()).isEqualTo(category);
         assertThat(computers2.get(0).price()).isGreaterThanOrEqualTo(minPrice);
     }
 
@@ -545,8 +541,8 @@ public class ComputerControllerIT extends AbstractTestcontainers {
                                                     .returnResult()
                                                     .getResponseBody();
         assertThat(computers2).isNotEmpty();
-        assertThat(computers2.get(0).brand().name()).isEqualTo(brand);
-        assertThat(computers2.get(0).category().name()).isEqualTo(category);
+        assertThat(computers2.get(0).brand()).isEqualTo(brand);
+        assertThat(computers2.get(0).category()).isEqualTo(category);
         assertThat(computers2.get(0).price()).isGreaterThanOrEqualTo(minPrice);
         assertThat(computers2.get(0).rating()).isGreaterThanOrEqualTo(minRating);
     }
@@ -567,8 +563,8 @@ public class ComputerControllerIT extends AbstractTestcontainers {
                                                     .returnResult()
                                                     .getResponseBody();
         assertThat(computers2).isNotEmpty();
-        assertThat(computers2.get(0).brand().name()).isEqualTo(brand);
-        assertThat(computers2.get(0).category().name()).isEqualTo(category);
+        assertThat(computers2.get(0).brand()).isEqualTo(brand);
+        assertThat(computers2.get(0).category()).isEqualTo(category);
         assertThat(computers2.get(0).price()).isGreaterThanOrEqualTo(minPrice);
         assertThat(computers2.get(0).rating()).isGreaterThanOrEqualTo(minRating);
         assertThat(validatePriceOrderAsc(computers2.stream()

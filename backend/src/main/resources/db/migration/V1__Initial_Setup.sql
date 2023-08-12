@@ -4,8 +4,8 @@ CREATE TABLE IF NOT EXISTS public.user (
   name VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL,
-  created_at TIMESTAMP NOT NULL,
-  updated_at TIMESTAMP NOT NULL,
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP,
   created_by VARCHAR(255),
   updated_by VARCHAR(255)
 );
@@ -17,8 +17,8 @@ CREATE INDEX IF NOT EXISTS idx_user_email ON public.user (email);
 CREATE TABLE IF NOT EXISTS category (
   id UUID PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
-                              created_at TIMESTAMP NOT NULL,
-                              updated_at TIMESTAMP NOT NULL,
+                              created_at TIMESTAMP,
+                              updated_at TIMESTAMP,
                               created_by VARCHAR(255),
                               updated_by VARCHAR(255)
 );
@@ -30,8 +30,8 @@ CREATE INDEX IF NOT EXISTS idx_category_name ON category (name);
 CREATE TABLE IF NOT EXISTS brand (
   id UUID PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
-                              created_at TIMESTAMP NOT NULL,
-                              updated_at TIMESTAMP NOT NULL,
+                              created_at TIMESTAMP,
+                              updated_at TIMESTAMP,
                               created_by VARCHAR(255),
                               updated_by VARCHAR(255)
 );
@@ -50,8 +50,8 @@ CREATE TABLE IF NOT EXISTS computer (
   category_id UUID NOT NULL,
   brand_id UUID NOT NULL,
   specification TEXT,
-                      created_at TIMESTAMP NOT NULL,
-                      updated_at TIMESTAMP NOT NULL,
+                      created_at TIMESTAMP,
+                      updated_at TIMESTAMP,
                       created_by VARCHAR(255),
                       updated_by VARCHAR(255),
   FOREIGN KEY (category_id) REFERENCES category (id),
@@ -74,8 +74,8 @@ CREATE TABLE IF NOT EXISTS cart_item (
   cart_id UUID NOT NULL,
   computer_id UUID NOT NULL,
   quantity INT,
-                created_at TIMESTAMP NOT NULL,
-                updated_at TIMESTAMP NOT NULL,
+                created_at TIMESTAMP,
+                updated_at TIMESTAMP,
                 created_by VARCHAR(255),
                 updated_by VARCHAR(255),
   FOREIGN KEY (cart_id) REFERENCES cart (id),
@@ -98,8 +98,8 @@ CREATE TABLE IF NOT EXISTS public.order (
   additional_note TEXT,
   total_amount DECIMAL(10, 2),
   order_status VARCHAR(20),
-                            created_at TIMESTAMP NOT NULL,
-                            updated_at TIMESTAMP NOT NULL,
+                            created_at TIMESTAMP,
+                            updated_at TIMESTAMP,
                             created_by VARCHAR(255),
                             updated_by VARCHAR(255),
   FOREIGN KEY (user_id) REFERENCES public.user (id)
@@ -112,8 +112,8 @@ CREATE TABLE IF NOT EXISTS order_item (
   computer_id UUID NOT NULL,
   quantity INT,
   price DECIMAL(10, 2),
-                        created_at TIMESTAMP NOT NULL,
-                        updated_at TIMESTAMP NOT NULL,
+                        created_at TIMESTAMP,
+                        updated_at TIMESTAMP,
                         created_by VARCHAR(255),
                         updated_by VARCHAR(255),
   FOREIGN KEY (order_id) REFERENCES public.order (id),
@@ -126,8 +126,8 @@ CREATE TABLE IF NOT EXISTS media (
   computer_id UUID,
   file_path VARCHAR(255),
   file_type VARCHAR(50),
-                         created_at TIMESTAMP NOT NULL,
-                         updated_at TIMESTAMP NOT NULL,
+                         created_at TIMESTAMP,
+                         updated_at TIMESTAMP,
                          created_by VARCHAR(255),
                          updated_by VARCHAR(255),
   FOREIGN KEY (computer_id) REFERENCES computer (id)

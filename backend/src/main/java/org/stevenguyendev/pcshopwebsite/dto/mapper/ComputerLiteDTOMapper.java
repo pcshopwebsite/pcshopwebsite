@@ -22,6 +22,8 @@ public class ComputerLiteDTOMapper implements Function<Computer, ComputerLiteDTO
                 computer.getPrice(),
                 computer.getRating(),
                 computer.getThumbnail(),
+                computer.getBrand().getName(),
+                computer.getCategory().getName(),
                 computer.getCreatedAt(),
                 computer.getUpdatedAt()
         );

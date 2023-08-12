@@ -34,7 +34,7 @@ public class CartService {
         this.cartItemRepository = cartItemRepository;
         this.computerRepository = computerRepository;
     }
-    public Cart getCartByUserId(Long userId) {
+    public Cart getCartByUserId(UUID userId) {
         return cartRepository.findByUserId(userId);
     }
     public Cart getCartByUserEmail(String userEmail) {

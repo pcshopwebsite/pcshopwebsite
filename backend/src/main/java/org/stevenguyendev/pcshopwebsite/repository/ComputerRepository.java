@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface ComputerRepository extends JpaRepository<Computer, UUID>, CustomComputerRepository {
-     Optional<Computer> findComputerByIdOrName(String id, String name);
      Optional<Computer> findComputerByName(String name);
      Optional<Computer> findComputerById(UUID id);
 }

@@ -6,7 +6,7 @@ import org.stevenguyendev.pcshopwebsite.model.Cart;
 import java.util.UUID;
 
 public interface CartRepository extends JpaRepository<Cart, UUID> {
-     Cart findByUserId(Long userId);
+     Cart findByUserId(UUID userId);
 
     Cart findByUserEmail(String userEmail);
 }

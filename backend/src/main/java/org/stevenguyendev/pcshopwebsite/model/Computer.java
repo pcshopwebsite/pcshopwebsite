@@ -36,13 +36,13 @@ public class Computer extends BaseAuditableEntity {
 
     @ManyToOne(
             fetch = FetchType.LAZY,
-            cascade = CascadeType.PERSIST
+            cascade = CascadeType.MERGE
     )
     private Category category;
 
     @ManyToOne(
             fetch = FetchType.LAZY,
-            cascade = CascadeType.PERSIST
+            cascade = CascadeType.MERGE
     )
     private Brand brand;
 

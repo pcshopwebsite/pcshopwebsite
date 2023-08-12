@@ -11,6 +11,8 @@ public record ComputerLiteDTO(
         BigDecimal price,
         Float rating,
         String thumbnail,
+        String brand,
+        String category,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {

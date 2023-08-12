@@ -19,6 +19,7 @@ import org.stevenguyendev.pcshopwebsite.repository.ComputerRepository;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,11 +54,22 @@ public class ComputerServiceImpl implements ComputerService {
     }
 
     public ComputerDTO findComputerByIdOrName(String idOrName) {
-        Computer computer = computerRepository.findComputerByIdOrName(idOrName, idOrName)
-                                 .orElseThrow(
-                                         () -> new ResourceNotFoundException("Computer with id or name " + idOrName + " not found")
-                                 );
-        return computerDTOMapper.apply(computer);
+        UUID id = null;
+        try {
+            id = UUID.fromString(idOrName);
+        } catch (IllegalArgumentException ignored) {
+        }
+
+        Optional<Computer> computerOptional = computerRepository.findComputerByName(idOrName);
+        if (computerOptional.isEmpty() && id == null) {
+            throw new ResourceNotFoundException("Computer not found.");
+        } else if (computerOptional.isPresent()) {
+            return computerDTOMapper.apply(computerOptional.get());
+        } else {
+            return computerRepository.findComputerById(id)
+                    .map(computerDTOMapper)
+                    .orElseThrow(() -> new ResourceNotFoundException("Computer not found."));
+        }
     }
 
     public ComputerDTO createComputer(ComputerDTO computerDTO) {
