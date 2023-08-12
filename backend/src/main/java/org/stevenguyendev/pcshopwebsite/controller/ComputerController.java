@@ -1,14 +1,12 @@
 package org.stevenguyendev.pcshopwebsite.controller;
 
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.stevenguyendev.pcshopwebsite.dto.ComputerDTO;
 import org.stevenguyendev.pcshopwebsite.dto.ComputerLiteDTO;
 import org.stevenguyendev.pcshopwebsite.dto.ComputerFilterRequest;
 import org.stevenguyendev.pcshopwebsite.dto.ComputerSort;
-import org.stevenguyendev.pcshopwebsite.dto.mapper.ComputerDTOMapper;
-import org.stevenguyendev.pcshopwebsite.dto.mapper.ComputerLiteDTOMapper;
-import org.stevenguyendev.pcshopwebsite.model.Computer;
 import org.stevenguyendev.pcshopwebsite.service.ComputerService;
 
 import java.util.List;
@@ -16,21 +14,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/computers")
 @CrossOrigin("*")
+@AllArgsConstructor
 public class ComputerController {
     private final ComputerService computerService;
-    private final ComputerDTOMapper computerDTOMapper;
-    private final ComputerLiteDTOMapper computerLiteDTOMapper;
-
-    public ComputerController(
-            ComputerService computerService,
-            ComputerDTOMapper computerDTOMapper,
-            ComputerLiteDTOMapper computerLiteDTOMapper
-    ) {
-        this.computerService = computerService;
-        this.computerDTOMapper = computerDTOMapper;
-        this.computerLiteDTOMapper = computerLiteDTOMapper;
-
-    }
 
     @GetMapping
     public List<ComputerLiteDTO> getAllComputers(
@@ -45,8 +31,8 @@ public class ComputerController {
             @RequestParam(required = false, defaultValue = "updatedAt") String sort,
             @RequestParam(required = false, defaultValue = "desc") String order
     ) {
-        /**
-         * Make sure the sort value is valid, otherwise set it to default value
+        /*
+          Make sure the sort value is valid, otherwise set it to default value
          */
         if (sort != null) {
             try {
@@ -67,16 +53,14 @@ public class ComputerController {
                 page,
                 size
         );
-        return computerService.getFilteredAndSortedComputers(filterRequest).stream()
-                .map(computerLiteDTOMapper)
-                .toList();
+        return computerService.filterComputers(filterRequest);
     }
 
     @GetMapping("/{idOrName}")
     public ResponseEntity<ComputerDTO> getComputerByIdOrName(@PathVariable String idOrName) {
-        Computer computer = computerService.getComputerByIdOrName(idOrName);
+        ComputerDTO computer = computerService.findComputerByIdOrName(idOrName);
         if (computer != null) {
-            return ResponseEntity.ok(computerDTOMapper.apply(computer));
+            return ResponseEntity.ok(computer);
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -84,25 +68,6 @@ public class ComputerController {
 
     @PostMapping
     public ResponseEntity<ComputerDTO> createComputer(@RequestBody ComputerDTO createRequest) {
-        Computer computer = Computer.builder()
-                .name(createRequest.name())
-                .price(createRequest.price())
-                .rating(createRequest.rating())
-                .description(createRequest.description())
-                .thumbnail(createRequest.thumbnail())
-                .build();
-        return ResponseEntity.ok(computerDTOMapper.apply(computerService.createComputer(computer)));
+        return ResponseEntity.ok(computerService.createComputer(createRequest));
     }
-
-//    @PutMapping("/{name}")
-//    public ResponseEntity<ComputerDTO> updateComputer(@PathVariable String name, @RequestBody ComputerDTO updateRequest) {
-//        Computer computer = modelMapper.map(updateRequest, Computer.class);
-//        return ResponseEntity.ok(modelMapper.map(computerService.updateComputer(name, computer), ComputerDTO.class));
-//    }
-//
-//    @DeleteMapping("/{name}")
-//    public ResponseEntity<Void> deleteComputer(@PathVariable String name) {
-//        computerService.deleteComputer(name);
-//        return ResponseEntity.noContent().build();
-//    }
 }

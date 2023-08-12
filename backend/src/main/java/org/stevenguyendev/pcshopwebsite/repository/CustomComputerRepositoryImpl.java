@@ -39,13 +39,14 @@ public class CustomComputerRepositoryImpl implements CustomComputerRepository {
         CriteriaQuery<Computer> cq = cb.createQuery(Computer.class);
         Root<Computer> computer = cq.from(Computer.class);
         List<Predicate> predicates = new ArrayList<>();
-        /**
-         * Don't change this order of path in multiselect as it's the order
-         * presented in supported constructor of Computer entity. This order
-         * is to ensure that JPA CriteriaBuilder can map the result to a Computer
-         * object in return.
+        /*
+          Don't change this order of path in multiselect as it's the order
+          presented in supported constructor of Computer entity. This order
+          is to ensure that JPA CriteriaBuilder can map the result to a Computer
+          object in return.
          */
         cq.multiselect(
+                computer.get("id"),
                 computer.get("name"),
                 computer.get("description"),
                 computer.get("price"),

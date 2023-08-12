@@ -4,17 +4,19 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "computer", schema = "public")
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Computer extends BaseAuditableEntity {
 
     @Column(unique = true, nullable = false)
@@ -33,12 +35,14 @@ public class Computer extends BaseAuditableEntity {
     private String thumbnail;
 
     @ManyToOne(
-            fetch = FetchType.LAZY
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.PERSIST
     )
     private Category category;
 
     @ManyToOne(
-            fetch = FetchType.LAZY
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.PERSIST
     )
     private Brand brand;
 
@@ -58,6 +62,30 @@ public class Computer extends BaseAuditableEntity {
             orphanRemoval = true
     )
     private final Set<CartItem> cartItems = new HashSet<>();
+
+    public Computer(
+            UUID id,
+            String name,
+            String description,
+            BigDecimal price,
+            Float rating,
+            String thumbnail,
+            Category category,
+            Brand brand,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt
+    ) {
+        this.setId(id);
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.rating = rating;
+        this.thumbnail = thumbnail;
+        this.category = category;
+        this.brand = brand;
+        this.setCreatedAt(createdAt);
+        this.setUpdatedAt(updatedAt);
+    }
 
     public void addMedia(Media mediaEntity) {
         medias.add(mediaEntity);
