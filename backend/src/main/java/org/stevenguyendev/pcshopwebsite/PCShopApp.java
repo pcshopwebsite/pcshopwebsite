@@ -1,19 +1,16 @@
+
 package org.stevenguyendev.pcshopwebsite;
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
 
-import org.springframework.context.annotation.Profile;
-import org.stevenguyendev.pcshopwebsite.computer.entity.Brand;
-import org.stevenguyendev.pcshopwebsite.computer.entity.Category;
-import org.stevenguyendev.pcshopwebsite.computer.entity.Computer;
-import org.stevenguyendev.pcshopwebsite.computer.repository.BrandRepository;
-import org.stevenguyendev.pcshopwebsite.computer.repository.CategoryRepository;
-import org.stevenguyendev.pcshopwebsite.computer.repository.ComputerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
+import org.stevenguyendev.pcshopwebsite.model.*;
+import org.stevenguyendev.pcshopwebsite.repository.*;
 
 import java.math.BigDecimal;
 
@@ -28,15 +25,34 @@ public class PCShopApp {
     CommandLineRunner runner(
             ComputerRepository computerRepository,
             BrandRepository brandRepository,
-            CategoryRepository categoryRepository
+            CategoryRepository categoryRepository,
+            UserRepository userRepository,
+            CartRepository cartRepository
     ) {
         return args -> {
-            cleanUp(computerRepository, brandRepository, categoryRepository);
+            cleanUpComputers(computerRepository, brandRepository, categoryRepository);
             addSampleComputers(computerRepository, brandRepository, categoryRepository);
+            cleanUpUsersAndCarts(cartRepository, userRepository);
+            addSampleUsersAndCarts(cartRepository, userRepository);
         };
     }
 
-    private void cleanUp(ComputerRepository computerRepository, BrandRepository brandRepository, CategoryRepository categoryRepository) {
+    private void addSampleUsersAndCarts(CartRepository cartRepository, UserRepository userRepository) {
+
+        User user1 = User.builder().name("John Doe").email("johndoe@gmail.com").password("password").build();
+//        user1 = userRepository.save(user1);
+        Cart cart = Cart.builder().user(user1).build();
+        cartRepository.save(cart);
+    }
+
+    private void cleanUpUsersAndCarts(CartRepository cartRepository, UserRepository userRepository) {
+        cartRepository.deleteAll();
+        userRepository.deleteAll();
+    }
+
+
+
+    private void cleanUpComputers(ComputerRepository computerRepository, BrandRepository brandRepository, CategoryRepository categoryRepository) {
         computerRepository.deleteAll();
         brandRepository.deleteAll();
         categoryRepository.deleteAll();
@@ -51,6 +67,7 @@ public class PCShopApp {
         Brand apple = brandRepository.save(new Brand("Apple"));
         Brand dell = brandRepository.save(new Brand("Dell"));
         Brand lenovo = brandRepository.save(new Brand("Lenovo"));
+        Brand hp = brandRepository.save(new Brand("HP"));
 
         // Save categories
         Category laptop = categoryRepository.save(new Category("Laptop"));
@@ -58,258 +75,258 @@ public class PCShopApp {
         Category macbook = categoryRepository.save(new Category("Macbook"));
 
         // Insert sample computers
-        computerRepository.save(new Computer(
-                "Macbook Pro 13\", Intel i5, 8GB RAM, 256GB SSD",
-                "13-inch Macbook Pro with Retina Display",
-                new BigDecimal("1299.99"),
-                4.5f,
-                "macbook-pro-13.jpg",
-                macbook,
-                apple,
-                "Specs for Macbook Pro 13-inch"
-        ));
+        computerRepository.save(Computer.builder()
+                .name("Macbook Pro 13\", Intel i5, 8GB RAM, 256GB SSD")
+                .description("13-inch Macbook Pro with Retina Display")
+                .price(new BigDecimal("1299.99"))
+                .rating(4.5f)
+                .thumbnail("macbook-pro-13.jpg")
+                .category(macbook)
+                .brand(apple)
+                .specification("Specs for Macbook Pro 13-inch")
+                .build()
+        );
 
-        computerRepository.save(new Computer(
-                "Dell XPS 15, Intel i7, 16GB RAM, 512GB SSD",
-                "15-inch Dell XPS laptop",
-                new BigDecimal("1799.99"),
-                4.7f,
-                "dell-xps-15.jpg",
-                laptop,
-                dell,
-                "Specs for Dell XPS 15"
-        ));
+        computerRepository.save(Computer.builder()
+                .name("Macbook Pro 16\", Intel i7, 16GB RAM, 512GB SSD")
+                .description("16-inch Macbook Pro with Retina Display")
+                .price(new BigDecimal("2399.99"))
+                .rating(4.8f)
+                .thumbnail("macbook-pro-16.jpg")
+                .category(macbook)
+                .brand(apple)
+                .specification("Specs for Macbook Pro 16-inch")
+                .build());
 
-        computerRepository.save(new Computer(
-                "Lenovo ThinkPad X1 Carbon, Intel i5, 16GB RAM, 512GB SSD",
-                "14-inch Lenovo ThinkPad X1 Carbon",
-                new BigDecimal("1399.99"),
-                4.6f,
-                "thinkpad-x1-carbon.jpg",
-                laptop,
-                lenovo,
-                "Specs for ThinkPad X1 Carbon"
-        ));
+        computerRepository.save(Computer.builder()
+                .name("Lenovo ThinkPad X1 Carbon, Intel i5, 16GB RAM, 512GB SSD")
+                .description("14-inch Lenovo ThinkPad X1 Carbon")
+                .price(new BigDecimal("1399.99"))
+                .rating(4.6f)
+                .thumbnail("thinkpad-x1-carbon.jpg")
+                .category(laptop)
+                .brand(lenovo)
+                .specification("Specs for ThinkPad X1 Carbon")
+                .build());
 
-        computerRepository.save(new Computer(
-                "Apple MacBook Air 13\", Intel i3, 8GB RAM, 256GB SSD",
-                "13-inch MacBook Air",
-                new BigDecimal("1099.99"),
-                4.4f,
-                "macbook-air-13.jpg",
-                macbook,
-                apple,
-                "Specs for MacBook Air 13-inch"
-        ));
+        computerRepository.save(Computer.builder()
+                .name("Lenovo ThinkPad X1 Extreme, Intel i7, 32GB RAM, 1TB SSD")
+                .description("15-inch Lenovo ThinkPad X1 Extreme")
+                .price(new BigDecimal("1999.99"))
+                .rating(4.7f)
+                .thumbnail("thinkpad-x1-extreme.jpg")
+                .category(laptop)
+                .brand(lenovo)
+                .specification("Specs for ThinkPad X1 Extreme")
+                .build());
 
-        computerRepository.save(new Computer(
-                "Dell Inspiron 14, Intel i5, 8GB RAM, 256GB SSD",
-                "14-inch Dell Inspiron laptop",
-                new BigDecimal("799.99"),
-                4.2f,
-                "dell-inspiron-14.jpg",
-                laptop,
-                dell,
-                "Specs for Dell Inspiron 14"
-        ));
+        computerRepository.save(Computer.builder()
+                .name("Lenovo ThinkPad X1 Yoga, Intel i7, 16GB RAM, 512GB SSD")
+                .description("14-inch Lenovo ThinkPad X1 Yoga")
+                .price(new BigDecimal("1799.99"))
+                .rating(4.7f)
+                .thumbnail("thinkpad-x1-yoga.jpg")
+                .category(laptop)
+                .brand(lenovo)
+                .specification("Specs for ThinkPad X1 Yoga")
+                .build());
 
-        computerRepository.save(new Computer(
-                "Dell XPS 13, Intel i7, 16GB RAM, 1TB SSD",
-                "13-inch Dell XPS laptop",
-                new BigDecimal("2099.99"),
-                4.8f,
-                "dell-xps-13.jpg",
-                laptop,
-                dell,
-                "Specs for Dell XPS 13"
-        ));
+        computerRepository.save(Computer.builder()
+                .name("Lenovo ThinkPad P1, Intel i7, 32GB RAM, 1TB SSD")
+                .description("15-inch Lenovo ThinkPad P1")
+                .price(new BigDecimal("1999.99"))
+                .rating(4.7f)
+                .thumbnail("thinkpad-p1.jpg")
+                .category(laptop)
+                .brand(lenovo)
+                .specification("Specs for ThinkPad P1")
+                .build());
 
-        computerRepository.save(new Computer(
-                "Dell Latitude 15, Intel i5, 8GB RAM, 512GB SSD",
-                "15-inch Dell Latitude laptop",
-                new BigDecimal("1099.99"),
-                4.3f,
-                "dell-latitude-15.jpg",
-                laptop,
-                dell,
-                "Specs for Dell Latitude 15"
-        ));
+        computerRepository.save(Computer.builder()
+                .name("Dell Latitude 15, Intel i5, 8GB RAM, 512GB SSD")
+                .description("15-inch Dell Latitude laptop")
+                .price(new BigDecimal("1099.99"))
+                .rating(4.3f)
+                .thumbnail("dell-latitude-15.jpg")
+                .category(laptop)
+                .brand(dell)
+                .specification("Specs for Dell Latitude 15")
+                .build());
 
-        computerRepository.save(new Computer(
-                "Apple iMac 21.5-inch, Intel i5, 8GB RAM, 512GB SSD",
-                "21.5-inch Apple iMac",
-                new BigDecimal("1299.99"),
-                4.6f,
-                "apple-imac-21.jpg",
-                desktop,
-                apple,
-                "Specs for Apple iMac 21.5-inch"
-        ));
+        computerRepository.save(Computer.builder()
+                .name("Dell XPS 13, Intel i7, 16GB RAM, 512GB SSD")
+                .description("13-inch Dell XPS laptop")
+                .price(new BigDecimal("1399.99"))
+                .rating(4.5f)
+                .thumbnail("dell-xps-13.jpg")
+                .category(laptop)
+                .brand(dell)
+                .specification("Specs for Dell XPS 13")
+                .build());
 
-        computerRepository.save(new Computer(
-                "Apple Mac Mini, Intel i3, 8GB RAM, 256GB SSD",
-                "Apple Mac Mini desktop",
-                new BigDecimal("799.99"),
-                4.4f,
-                "apple-mac-mini.jpg",
-                desktop,
-                apple,
-                "Specs for Apple Mac Mini"
-        ));
+        computerRepository.save(Computer.builder()
+                .name("Dell XPS 15, Intel i7, 32GB RAM, 1TB SSD")
+                .description("15-inch Dell XPS laptop")
+                .price(new BigDecimal("1999.99"))
+                .rating(4.7f)
+                .thumbnail("dell-xps-15.jpg")
+                .category(laptop)
+                .brand(dell)
+                .specification("Specs for Dell XPS 15")
+                .build());
 
-        computerRepository.save(new Computer(
-                "Apple Mac Pro, Intel Xeon, 32GB RAM, 1TB SSD",
-                "Apple Mac Pro workstation",
-                new BigDecimal("4999.99"),
-                4.9f,
-                "apple-mac-pro.jpg",
-                desktop,
-                apple,
-                "Specs for Apple Mac Pro"
-        ));
+        computerRepository.save(Computer.builder()
+                .name("Dell Precision 15, Intel i7, 32GB RAM, 1TB SSD")
+                .description("15-inch Dell Precision laptop")
+                .price(new BigDecimal("1999.99"))
+                .rating(4.7f)
+                .thumbnail("dell-precision-15.jpg")
+                .category(laptop)
+                .brand(dell)
+                .specification("Specs for Dell Precision 15")
+                .build());
 
-        computerRepository.save(new Computer(
-                "Lenovo ThinkPad E14, Intel i5, 8GB RAM, 256GB SSD",
-                "14-inch Lenovo ThinkPad",
-                new BigDecimal("999.99"),
-                4.5f,
-                "thinkpad-e14.jpg",
-                laptop,
-                lenovo,
-                "Specs for ThinkPad E14"
-        ));
+        computerRepository.save(Computer.builder()
+                .name("Dell Inspiron 15, Intel i5, 8GB RAM, 512GB SSD")
+                .description("15-inch Dell Inspiron laptop")
+                .price(new BigDecimal("1099.99"))
+                .rating(4.3f)
+                .thumbnail("dell-inspiron-15.jpg")
+                .category(laptop)
+                .brand(dell)
+                .specification("Specs for Dell Inspiron 15")
+                .build());
 
-        computerRepository.save(new Computer(
-                "Lenovo IdeaPad 15, Intel i3, 4GB RAM, 1TB HDD",
-                "15-inch Lenovo IdeaPad laptop",
-                new BigDecimal("599.99"),
-                4.1f,
-                "ideapad-15.jpg",
-                laptop,
-                lenovo,
-                "Specs for Lenovo IdeaPad 15"
-        ));
+        computerRepository.save(Computer.builder()
+                .name("HP EliteBook 840, Intel i5, 8GB RAM, 512GB SSD")
+                .description("14-inch HP EliteBook laptop")
+                .price(new BigDecimal("1099.99"))
+                .rating(4.3f)
+                .thumbnail("hp-elitebook-840.jpg")
+                .category(laptop)
+                .brand(hp)
+                .specification("Specs for HP EliteBook 840")
+                .build());
 
-        computerRepository.save(new Computer(
-                "Lenovo Legion 5, AMD Ryzen 7, 16GB RAM, 512GB SSD",
-                "15-inch Lenovo gaming laptop",
-                new BigDecimal("1399.99"),
-                4.7f,
-                "legion-5.jpg",
-                laptop,
-                lenovo,
-                "Specs for Lenovo Legion 5"
-        ));
+        computerRepository.save(Computer.builder()
+                .name("HP EliteBook 850, Intel i7, 16GB RAM, 512GB SSD")
+                .description("15-inch HP EliteBook laptop")
+                .price(new BigDecimal("1399.99"))
+                .rating(4.5f)
+                .thumbnail("hp-elitebook-850.jpg")
+                .category(laptop)
+                .brand(hp)
+                .specification("Specs for HP EliteBook 850")
+                .build());
 
-        computerRepository.save(new Computer(
-                "Apple MacBook Pro 16\", Intel i7, 16GB RAM, 512GB SSD",
-                "16-inch MacBook Pro",
-                new BigDecimal("2399.99"),
-                4.9f,
-                "macbook-pro-16.jpg",
-                laptop,
-                apple,
-                "Specs for MacBook Pro 16-inch"
-        ));
+        computerRepository.save(Computer.builder()
+                .name("HP ZBook 15, Intel i7, 32GB RAM, 1TB SSD")
+                .description("15-inch HP ZBook laptop")
+                .price(new BigDecimal("1999.99"))
+                .rating(4.7f)
+                .thumbnail("hp-zbook-15.jpg")
+                .category(laptop)
+                .brand(hp)
+                .specification("Specs for HP ZBook 15")
+                .build());
 
-        computerRepository.save(new Computer(
-                "Apple MacBook Air 15\", Intel i3, 8GB RAM, 256GB SSD",
-                "15-inch MacBook Air",
-                new BigDecimal("1099.99"),
-                4.4f,
-                "macbook-air-15.jpg",
-                laptop,
-                apple,
-                "Specs for MacBook Air 15-inch"
-        ));
+        computerRepository.save(Computer.builder()
+                .name("HP ProBook 450, Intel i5, 8GB RAM, 512GB SSD")
+                .description("15-inch HP ProBook laptop")
+                .price(new BigDecimal("1099.99"))
+                .rating(4.3f)
+                .thumbnail("hp-probook-450.jpg")
+                .category(laptop)
+                .brand(hp)
+                .specification("Specs for HP ProBook 450")
+                .build());
 
-        computerRepository.save(new Computer(
-                "Dell OptiPlex 3070, Intel i5, 8GB RAM, 256GB SSD",
-                "Dell OptiPlex desktop",
-                new BigDecimal("899.99"),
-                4.3f,
-                "dell-optiplex-3070.jpg",
-                desktop,
-                dell,
-                "Specs for Dell OptiPlex 3070"
-        ));
+        computerRepository.save(Computer.builder()
+                .name("Apple MacBook Pro 13\", M1, 8GB RAM, 256GB SSD")
+                .description("13-inch Apple MacBook Pro")
+                .price(new BigDecimal("1299.99"))
+                .rating(4.5f)
+                .thumbnail("macbook-pro-13.jpg")
+                .category(laptop)
+                .brand(apple)
+                .specification("Specs for Apple MacBook Pro 13\"")
+                .build());
 
-        computerRepository.save(new Computer(
-                "Dell Precision 5750, Intel i7, 32GB RAM, 1TB SSD",
-                "Dell Precision workstation",
-                new BigDecimal("2799.99"),
-                4.8f,
-                "dell-precision-5750.jpg",
-                desktop,
-                dell,
-                "Specs for Dell Precision 5750"
-        ));
+        computerRepository.save(Computer.builder()
+                .name("Apple MacBook Pro 16\", Intel i7, 16GB RAM, 512GB SSD")
+                .description("16-inch Apple MacBook Pro")
+                .price(new BigDecimal("1999.99"))
+                .rating(4.7f)
+                .thumbnail("macbook-pro-16.jpg")
+                .category(laptop)
+                .brand(apple)
+                .specification("Specs for Apple MacBook Pro 16\"")
+                .build());
 
-        computerRepository.save(new Computer(
-                "Apple MacBook Pro 13\", M1, 8GB RAM, 256GB SSD",
-                "13-inch MacBook Pro",
-                new BigDecimal("1499.99"),
-                4.7f,
-                "macbook-pro-13-m1.jpg",
-                laptop,
-                apple,
-                "Specs for MacBook Pro 13-inch M1"
-        ));
+        computerRepository.save(Computer.builder()
+                .name("Apple MacBook Air 11\", Intel Core 2 Duo, 4GB RAM, 128GB SSD")
+                .description("11-inch Apple MacBook Air")
+                .price(new BigDecimal("799.99"))
+                .rating(4.1f)
+                .thumbnail("macbook-air-11.jpg")
+                .category(laptop)
+                .brand(apple)
+                .specification("Specs for Apple MacBook Air 11\"")
+                .build());
 
-        computerRepository.save(new Computer(
-                "Apple MacBook Air 11\", Intel Core 2 Duo, 4GB RAM, 128GB SSD",
-                "11-inch MacBook Air",
-                new BigDecimal("799.99"),
-                4.1f,
-                "macbook-air-11.jpg",
-                laptop,
-                apple,
-                "Specs for MacBook Air 11-inch"
-        ));
+        computerRepository.save(Computer.builder()
+                .name("Lenovo ThinkPad X1 Carbon, Intel i7, 16GB RAM, 1TB SSD")
+                .description("14-inch Lenovo ThinkPad")
+                .price(new BigDecimal("1899.99"))
+                .rating(4.9f)
+                .thumbnail("thinkpad-x1-carbon.jpg")
+                .category(laptop)
+                .brand(lenovo)
+                .specification("Specs for Lenovo ThinkPad X1 Carbon")
+                .build());
 
-        computerRepository.save(new Computer(
-                "Lenovo ThinkPad X1 Carbon, Intel i7, 16GB RAM, 1TB SSD",
-                "14-inch Lenovo ThinkPad",
-                new BigDecimal("1899.99"),
-                4.9f,
-                "thinkpad-x1-carbon.jpg",
-                laptop,
-                lenovo,
-                "Specs for ThinkPad X1 Carbon"
-        ));
+        computerRepository.save(Computer.builder()
+                .name("Lenovo IdeaPad 14, Intel i3, 8GB RAM, 512GB SSD")
+                .description("14-inch Lenovo IdeaPad laptop")
+                .price(new BigDecimal("799.99"))
+                .rating(4.3f)
+                .thumbnail("ideapad-14.jpg")
+                .category(laptop)
+                .brand(lenovo)
+                .specification("Specs for Lenovo IdeaPad 14")
+                .build());
 
-        computerRepository.save(new Computer(
-                "Lenovo IdeaPad 14, Intel i3, 8GB RAM, 512GB SSD",
-                "14-inch Lenovo IdeaPad laptop",
-                new BigDecimal("799.99"),
-                4.3f,
-                "ideapad-14.jpg",
-                laptop,
-                lenovo,
-                "Specs for Lenovo IdeaPad 14"
-        ));
+        computerRepository.save(Computer.builder()
+                .name("Lenovo ThinkCentre M90n, Intel i5, 8GB RAM, 512GB SSD")
+                .description("Lenovo ThinkCentre desktop")
+                .price(new BigDecimal("999.99"))
+                .rating(4.6f)
+                .thumbnail("thinkcentre-m90n.jpg")
+                .category(desktop)
+                .brand(lenovo)
+                .specification("Specs for ThinkCentre M90n")
+                .build());
 
-        computerRepository.save(new Computer(
-                "Lenovo ThinkCentre M90n, Intel i5, 8GB RAM, 512GB SSD",
-                "Lenovo ThinkCentre desktop",
-                new BigDecimal("999.99"),
-                4.6f,
-                "thinkcentre-m90n.jpg",
-                desktop,
-                lenovo,
-                "Specs for ThinkCentre M90n"
-        ));
+        computerRepository.save(Computer.builder()
+                .name("Lenovo Legion Tower 5, Intel i7, 16GB RAM, 1TB SSD")
+                .description("Lenovo Legion gaming desktop")
+                .price(new BigDecimal("1599.99"))
+                .rating(4.8f)
+                .thumbnail("legion-tower-5.jpg")
+                .category(desktop)
+                .brand(lenovo)
+                .specification("Specs for Legion Tower 5")
+                .build());
 
-        computerRepository.save(new Computer(
-                "Lenovo Legion Tower 5, Intel i7, 16GB RAM, 1TB SSD",
-                "Lenovo Legion gaming desktop",
-                new BigDecimal("1599.99"),
-                4.8f,
-                "legion-tower-5.jpg",
-                desktop,
-                lenovo,
-                "Specs for Legion Tower 5"
-        ));
+        computerRepository.save(Computer.builder()
+                .name("Lenovo ThinkStation P340, Intel i7, 32GB RAM, 1TB SSD")
+                .description("Lenovo ThinkStation desktop")
+                .price(new BigDecimal("1999.99"))
+                .rating(4.9f)
+                .thumbnail("thinkstation-p340.jpg")
+                .category(desktop)
+                .brand(lenovo)
+                .specification("Specs for ThinkStation P340")
+                .build());
     }
-
 }
