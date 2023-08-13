@@ -7,10 +7,6 @@ on:
       - frontend/**
   workflow_dispatch: {} # Not sure what does this do, but let see the document later on
 
-env:
-  AWS_REGION: ap-southeast-1
-  S3BUCKET: pcshop-dev
-  CLOUDFRONT_DISTRIBUTION_ID: E2TRC7ND4WHS1W
 jobs:
   deploy-dev:
     name: Deploy to Dev
@@ -31,7 +27,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.IAMROLE_GITHUB }}
           role-session-name: GitHub-Action-Role
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: ${{ vars.AWS_REGION }}
       - name: Set up Node.js 16
         uses: actions/setup-node@v3
         with:
@@ -52,10 +48,12 @@ jobs:
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm ci
       - name: Build
-        run: npm run build -- --configuration=development
+        run: |
+          sed -i 's/#{baseUrl}/http:\/\/ec2-18-139-229-119.ap-southeast-1.compute.amazonaws.com/g' src/assets/config/config.json
+          npm run build -- --configuration=production
       - name: Cleanup running resource files
-        run: aws s3 rm --recursive s3://${{ env.S3BUCKET }}
+        run: aws s3 rm --recursive s3://${{ vars.S3BUCKET }}
       - name: Upload to S3
-        run: aws s3 cp --recursive dist/pcshop-spa/ s3://${{ env.S3BUCKET }}
+        run: aws s3 cp --recursive dist/pcshop-spa/ s3://${{ vars.S3BUCKET }}
       - name: Invalidate CloudFront
-        run: aws cloudfront create-invalidation --distribution-id ${{ env.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
+        run: aws cloudfront create-invalidation --distribution-id ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
