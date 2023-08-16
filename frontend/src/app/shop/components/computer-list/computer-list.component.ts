@@ -5,21 +5,34 @@ import { ComputerDto } from 'src/app/shop/models/computer-dto';
 import { Observable } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { CartService } from '../../services/cart.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-computer-list',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule],
+  imports: [
+    CommonModule, 
+    MatIconModule, 
+    MatButtonModule,
+    RouterModule
+  ],
   templateUrl: './computer-list.component.html',
   styleUrls: ['./computer-list.component.scss']
 })
 export class ComputerListComponent implements OnInit {
-
+  
   computers$: Observable<ComputerDto[]> | undefined;
-
-  constructor(private computerService: ComputerService) { }
-
+  
+  constructor(
+    private computerService: ComputerService,
+    private cartService: CartService
+  ) { }
+  
   ngOnInit(): void {
     this.computers$ = this.computerService.findAll();
+  }
+  addToCart(_t38: ComputerDto) {
+    this.cartService.addToCart(_t38).subscribe();
   }
 }

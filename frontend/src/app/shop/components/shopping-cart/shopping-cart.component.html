@@ -1,1 +1,50 @@
-<p>shopping-cart works!</p>
+<section id="shopping-cart">
+    <div class="cart-header">
+        <h1>Shopping cart</h1>
+        <button mat-icon-button aria-hidden="false" color="accent" aria-label="Close">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div class="cart-body">
+        <div class="cart-item-list">
+            <div class="cart-item" *ngFor="let item of cartItems$ | async as list">
+                <div class="cart-item-img">
+                    <img [src]="item.computer?.thumbnail" [alt]="item.computer?.name" onerror="this.onerror=null;this.src='/assets/images/macbookpro14inches.jpg'"/>
+                </div>
+                <div class="cart-item-info">
+                    <h2>{{ item.computer?.name }}</h2>
+                    <p> {{ item.computer?.description }}</p>
+                    <p> ${{ item.computer?.price }}</p>
+                    <p> R{{ item.computer?.rating }}</p>
+                </div>
+                <div class="cart-item-actions">
+                    <button mat-icon-button aria-hidden="false" color="accent" aria-label="Remove">
+                        <mat-icon>remove_shopping_cart</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="payment-summary">
+            <div class="payment-summary-item">
+                <p>Subtotal</p>
+                <p>$0.00</p>
+            </div>
+            <div class="payment-summary-item">
+                <p>Shipping</p>
+                <p>$0.00</p>
+            </div>
+            <div class="payment-summary-item">
+                <p>Tax</p>
+                <p>$0.00</p>
+            </div>
+            <div class="payment-summary-item">
+                <p>Total</p>
+                <p>$0.00</p>
+            </div>
+            <div class="payment-summary-item">
+                <button mat-raised-button color="accent" class="payment-summary-btn">Checkout</button>
+            </div>
+        </div>
+    </div>
+    <div class="cart-footer"></div>
+</section>

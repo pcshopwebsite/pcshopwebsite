@@ -10,8 +10,8 @@ import { AppConfigService } from 'src/app/core/services/app-config.service';
 export class ComputerService {
   private readonly computerUrl = `${AppConfigService.settings.api.baseUrl}/${AppConfigService.settings.api.computerUrl}`;
   constructor(private http: HttpClient) { }
-
+  
   findAll() : Observable<ComputerDto[]> {
-      return this.http.get<ComputerDto[]>(this.computerUrl);
+    return this.http.get<ComputerDto[]>(this.computerUrl);
   }
 }
