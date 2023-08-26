@@ -296,7 +296,7 @@ $newDarkTheme: mat.define-dark-theme(
         density: 0
     )
 );
-$theme: (
+$altTheme: (
   primary: $theme-primary,
   accent: $theme-accent,
   warn: $theme-warn,
@@ -304,7 +304,7 @@ $theme: (
   foreground: $mat-dark-theme-foreground,
   background: $mat-dark-theme-background,
 );
-$altTheme: (
+$theme: (
   primary: $theme-primary,
   accent: $theme-accent,
   warn: $theme-warn,

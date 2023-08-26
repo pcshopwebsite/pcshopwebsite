@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { CartService } from '../../services/cart.service';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-computer-list',
@@ -26,13 +26,19 @@ export class ComputerListComponent implements OnInit {
   
   constructor(
     private computerService: ComputerService,
-    private cartService: CartService
-  ) { }
-  
-  ngOnInit(): void {
-    this.computers$ = this.computerService.findAll();
-  }
-  addToCart(_t38: ComputerDto) {
-    this.cartService.addToCart(_t38).subscribe();
-  }
+    private cartService: CartService,
+    private router: Router
+    ) { }
+    
+    ngOnInit(): void {
+      this.computers$ = this.computerService.findAll();
+    }
+    addToCart(_t38: ComputerDto) {
+      this.cartService.addToCart(_t38).subscribe();
+    }
+    buyComputerNow(computer: ComputerDto) {
+      this.cartService.addToCart(computer).subscribe(() => {
+        this.router.navigate(['/shop/cart']);
+      });
+    }
 }

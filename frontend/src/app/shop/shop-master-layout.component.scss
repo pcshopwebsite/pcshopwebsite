@@ -15,11 +15,12 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: fixed;
+    position: sticky;
     top: 1;
     left: 0;
     z-index: 1;
     width: 100vw;
+    height: 64px;
     background-color: var(--secondary-color);
     box-shadow: 2px 3px 2px var(--secondary-darker-color);
     .search {
@@ -60,4 +61,12 @@ nav {
         height: 4px;
         margin: 6px 0;
     }
+}
+
+.footer-menu {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 2rem;
+
 }

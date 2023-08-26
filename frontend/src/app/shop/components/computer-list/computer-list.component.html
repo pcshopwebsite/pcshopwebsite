@@ -23,13 +23,13 @@
             <span class="stars">★★★★★</span>
         </div>
         <div class="actions">
-            <button mat-icon-button aria-hidden="false" aria-label="Add to cart" (click)="addToCart(computer)">
+            <button mat-icon-button aria-hidden="false" aria-label="Add to cart" (click)="addToCart(computer)" color="accent">
                 <mat-icon>add_shopping_cart</mat-icon>
             </button>
-            <button mat-icon-button aria-hidden="false" aria-label="Save">
+            <button mat-icon-button aria-hidden="false" aria-label="Save" color="accent">
                 <mat-icon>bookmark</mat-icon>
             </button>
-            <button mat-button color="accent" [routerLink]="['../cart']" routerLinkActive="router-link-active" >Buy now</button>
+            <button mat-raised-button color="accent" (click)="buyComputerNow(computer)">Buy now</button>
         </div>
     </div>
 </section>

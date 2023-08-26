@@ -1,67 +1,3 @@
-a {
-    text-decoration: none;
-    color: var(var(--primary-color));
-}
-
-a:hover {
-    color: var(--accent-color);
-}
-
-.pcshop {
-    color: var(--primary-darker-color);
-}
-
-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: fixed;
-    top: 1;
-    left: 0;
-    z-index: 1;
-    width: 100vw;
-    background-color: var(--secondary-color);
-    box-shadow: 2px 3px 2px var(--secondary-darker-color);
-    .search {
-        min-width: 280px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        #searchInput {
-            height: 2rem;
-            width: 100%;
-            padding: 0 12px 0 12px;
-            border: 1px solid var(--primary-color);
-            border-radius: 6px;
-        }
-    }
-}
-
-.menu {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    .menu-item {
-        margin: 0 1rem;
-        font-size: 1.2rem;
-        // font-weight: typography.$bold-font;
-        cursor: pointer;
-        &:hover {
-            color: var(--accent-color);
-        }
-    }
-}
-
-.hamburger {
-    display: none;
-    .bar {
-        display: inline-block;
-        width: 30px;
-        height: 4px;
-        margin: 6px 0;
-    }
-}
-
 #hero {
     display: flex;
     justify-content: center;
@@ -99,14 +35,17 @@ nav {
     display: grid;
     grid-template-columns: repeat(5, minmax(200px, 1fr));
     gap: 32px;
+    background-color: var(--secondary-color);
+    padding: 32px 16px;
     .computer-card {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        align-items: center;
+        align-items: flex-start;
         border: 1px solid #f1f1f1;
         border-radius: 10px;
         padding: 1rem;
+        background-color: #fff;
         &:hover{
             box-shadow: 3px 3px 3px 3px #f1f1f1;
             transition: 0.2s ease-in;
@@ -118,8 +57,10 @@ nav {
         }
         .actions {
             display: flex;
-            justify-content: space-between;
+            justify-content: space-around;
             align-items: center;
+            width: 100%;
+            margin-top: 1rem;
         }
     }
 }

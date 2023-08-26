@@ -30,7 +30,13 @@ export class CartService {
   findAllCartItemsOfCart(cartId: string): Observable<CartItemDto[] | undefined> {
     const url = `${this.cartUrl}/${cartId}`;
     return this.http.get<CartDto>(url).pipe(
-      map((cart: CartDto) => cart.cartItems)
+      map((cart: CartDto) => cart.cartItems),
+      map((cartItems: CartItemDto[]) => {
+        return cartItems.map((cartItem: CartItemDto) => {
+          cartItem.subTotal = cartItem.computer.price * cartItem.quantity;
+          return cartItem;
+        })
+      })
     );
   }
   addToCart(_t38: ComputerDto): Observable<CartDto> {
@@ -41,5 +47,14 @@ export class CartService {
       action: 'ADD'
     }
     return this.http.put<any>(this.cartUrl, addToCartRequest);
+  }
+  removeFromCart(_t38: ComputerDto): Observable<CartDto> {
+    const removeFromCartRequest = {
+      cartId: this.cart.id,
+      computerId: _t38.id,
+      quantity: 1,
+      action: 'REMOVE'
+    }
+    return this.http.put<any>(this.cartUrl, removeFromCartRequest);
   }
 }

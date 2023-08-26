@@ -1,0 +1,16 @@
+<section class="checkout-container">
+    <header>
+        <h2>Checkout step {{ selectedIndex + 1 }} / {{ steps.length }}</h2>
+    </header>
+    <div [ngTemplateOutlet]="selected ? selected.content : null"></div>
+    <footer class="checkout-step-navigation-bar">
+        <button cdkStepperPrevious></button>
+        <button class="step"
+            [class.step-active]="selectedIndex == i"
+            *ngFor="let step of steps; let i = index"
+            (click)="selectStepByIndex(i)">
+            Step {{ i + 1}}
+        </button>
+        <button cdkStepperNext></button>
+    </footer>
+</section>
