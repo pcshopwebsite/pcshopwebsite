@@ -3,5 +3,6 @@ export interface AppConfig {
         baseUrl: string,
         authUrl: string,
         computerUrl: string
+        cartUrl: string
     }
 }

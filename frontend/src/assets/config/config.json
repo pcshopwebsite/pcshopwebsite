@@ -2,6 +2,7 @@
     "api": {
       "baseUrl": "#{baseUrl}",
       "authUrl": "api/v1/auth/login",
-      "computerUrl": "api/v1/computers"
+      "computerUrl": "api/v1/computers",
+      "cartUrl": "api/v1/carts"
     }
 }

@@ -1,1 +1,115 @@
-<p>shopping-cart works!</p>
+<section id="shopping-cart">
+    <div class="cart-header">
+        <h1>Shopping cart</h1>
+        <div class="search">
+            <input matInput type="text" placeholder="Search your cart"/>
+            <button mat-icon-button color="primary">
+                <mat-icon>search</mat-icon>
+            </button>
+        </div>
+    </div>
+    <div class="cart-body" *ngIf="cartItems$ | async as cartItems; else loadingCart">
+        <div class="cart-items-header">
+            <mat-checkbox id="cart-items-header-select"></mat-checkbox>
+            <h3 class="product-header">Product</h3>
+            <h3 class="price-header">Price</h3>
+            <h3 class="quantity-header">Quantity</h3>
+            <h3 class="subtotal-header">Sub total</h3>
+            <h3 class="actions-header">Actions</h3>
+        </div>
+        <ng-container *ngIf="cartItems.length; else emptyCart">
+            <div class="cart-item" *ngFor="let item of cartItems">
+                <mat-checkbox class="cart-item-select"></mat-checkbox>
+                <div class="cart-item-img">
+                    <img [src]="item.computer.thumbnail" [alt]="item.computer.name" onerror="this.onerror=null;this.src='/assets/images/macbookpro14inches.jpg'"/>
+                </div>
+                <div class="cart-item-info">
+                    <h2>{{ item.computer.name }}</h2>
+                    <p> {{ item.computer.description }}</p>
+                    <p> R{{ item.computer.rating }}</p>
+                </div>
+                <div class="cart-item-price">
+                    <p> ${{ item.computer.price }}</p>
+                </div>
+                <div class="cart-item-quantity">
+                    <div class="item-quantity-controls">
+                        <button mat-icon-button class="decrease-quantity-btn">
+                            <mat-icon>remove</mat-icon>
+                        </button>
+                        <input type="text" name="item-quantity" min="0"[value]="item.quantity" disabled>
+                        <button mat-icon-button class="increase-quantity-btn">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </div>
+                </div>
+                <div class="cart-item-sub-total">
+                    <h3>{{ item.subTotal | currency }}</h3>
+                </div>
+                <div class="cart-item-actions">
+                    <button mat-icon-button aria-hidden="false" aria-label="Save"
+                    matTooltip="Add computer to wishlist">
+                        <mat-icon>bookmark</mat-icon>
+                    </button>
+                    <button mat-icon-button aria-hidden="false" aria-label="Remove"
+                        matTooltip="Delete computer from cart">
+                        <mat-icon>remove_shopping_cart</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+    <ng-template #emptyCart>
+        <div class="empty-cart">
+            <img src="/assets/images/empty-cart.jpg" alt="Your cart is empty" id="empty-cart-img">
+            <h3>Giỏ hàng của bạn hiện đang trống.</h3>
+            <button mat-raised-button color="primary" [routerLink]="['/shop/computers']" routerLinkActive="router-link-active" >Tặm tia những chiếc máy tính xịn xò ngay!</button>
+        </div>
+    </ng-template>
+    <ng-template #loadingCart>
+        <h3>Chúng tôi đang tải giỏ hàng của bạn. Xin hãy chờ trong giây lát!</h3>
+    </ng-template>
+    <div class="cart-footer">
+        <div class="cart-footer-content">
+            <h3 class="subtotal-for-checkout">${{ subTotal }}</h3>
+            <button mat-flat-button 
+                color="accent" 
+                class="proceed-checkout-btn"
+                [routerLink]="['/shop/checkout']">Proceed to checkout</button>
+        </div>
+    </div>
+</section>
+<!-- <div class="payment-summary">
+    <div class="payment-method">
+        <label id="payment-methods-label">How you'll pay</label>
+        <div id="paypal-standard-checkout"></div>
+        <mat-radio-group
+            aria-labelledby="payment-methods-label"
+            class="payment-methods-radio-group"
+            [(ngModel)]="paymentMethod">
+            <mat-radio-button class="payment-method-radio-btn" *ngFor="let method of paymentMethods" [value]="method">
+                <div class="payment-method inline-block">
+                    <img [src]="icon" [alt]="method.name" *ngFor="let icon of method.logos">
+                </div>
+            </mat-radio-button>
+        </mat-radio-group>
+    </div>
+    <div class="payment-summary-item">
+        <p>Subtotal</p>
+        <p>$0.00</p>
+    </div>
+    <div class="payment-summary-item">
+        <p>Shipping</p>
+        <p>$0.00</p>
+    </div>
+    <div class="payment-summary-item">
+        <p>Tax</p>
+        <p>$0.00</p>
+    </div>
+    <div class="payment-summary-item">
+        <p>Total</p>
+        <p>$0.00</p>
+    </div>
+    <div class="payment-summary-item">
+        <button mat-raised-button color="accent" class="payment-summary-btn">Checkout</button>
+    </div>
+</div> -->

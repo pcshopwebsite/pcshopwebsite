@@ -1,38 +1,11 @@
-<!-- Nav bar -->
-<nav id="nav">
-    <div class="hamburger" id="hamburger">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-    </div>
-    <a href="" class="logo">
-        <h1>
-            <span class="pc">PC</span><span class="shop">Shop</span><span>👍</span>
-        </h1>
-    </a>
-    <input type="text" class="search" id="search" placeholder="Macbook pro" />
-    <ul class="menu">
-        <li class="menu-item">
-            <button mat-icon-button arial-hidden="false" aria-label="Chat">
-                <mat-icon>chat</mat-icon>
-            </button>
-            <a href="#" class="message" id="message">Message</a>
-        </li>
-        <li class="menu-item">
-            <button mat-icon-button arial-hidden="false" aria-label="Shopping cart">
-                <mat-icon>shopping_cart</mat-icon>
-            </button>
-            <a href="#" class="cart" id="cart">Shopping cart</a>
-        </li>
-    </ul>
-</nav>
 <!-- Hero section -->
 <section id="hero">
     <div class="hero-content">
         <h1 class="hero-title">PC Shop</h1>
         <p class="hero-subtitle">Find the best deals for your next PC</p>
-        <a href="#" class="hero-btn">Shop now</a>
+        <button mat-raised-button color="accent" class="hero-btn">Shop now</button>
     </div>
+    <div class="non-hero-content"></div>
 </section>
 <!-- Computer list-->
 <section id="computers">
@@ -50,30 +23,13 @@
             <span class="stars">★★★★★</span>
         </div>
         <div class="actions">
-            <button mat-icon-button aria-hidden="false" aria-label="Add to cart">
+            <button mat-icon-button aria-hidden="false" aria-label="Add to cart" (click)="addToCart(computer)" color="accent">
                 <mat-icon>add_shopping_cart</mat-icon>
             </button>
-            <button mat-icon-button aria-hidden="false" aria-label="Save">
+            <button mat-icon-button aria-hidden="false" aria-label="Save" color="accent">
                 <mat-icon>bookmark</mat-icon>
             </button>
-            <button mat-button color="accent">Buy now</button>
+            <button mat-raised-button color="accent" (click)="buyComputerNow(computer)">Buy now</button>
         </div>
     </div>
 </section>
-<!--Footer-->
-<footer>
-    <ul>
-        <li>
-            <a href="#">Home</a>
-        </li>
-        <li>
-            <a href="">Categories</a>
-        </li>
-        <li>
-            <a href="">Shops</a>
-        </li>
-        <li>
-            <a href="">Account</a>
-        </li>
-    </ul>
-</footer>

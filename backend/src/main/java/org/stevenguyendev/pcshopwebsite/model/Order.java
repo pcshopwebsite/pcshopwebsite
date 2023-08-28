@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "order", schema = "public")
@@ -38,11 +37,19 @@ public class Order extends BaseAuditableEntity {
     @Column(name = "additional_note")
     private String additionalNote;
 
+    // Subtotal
     @Column(name = "total_amount")
     private BigDecimal totalAmount;
 
     @Column(name = "order_status")
-    private String orderStatus;
+    private OrderStatus orderStatus;
+
+    @OneToMany(
+            mappedBy = "orderProduct.order",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<OrderItem> orderItems;
 
     @Override
     public String toString() {
@@ -56,6 +63,7 @@ public class Order extends BaseAuditableEntity {
                 ", additionalNote='" + additionalNote + '\'' +
                 ", totalAmount=" + totalAmount +
                 ", orderStatus='" + orderStatus + '\'' +
+                ", orderItems=" + orderItems +
                 "} " + super.toString();
     }
 }
