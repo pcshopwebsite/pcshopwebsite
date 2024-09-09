@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.stevenguyendev.pcshopwebsite.dto.OrderDTO;
+import org.stevenguyendev.pcshopwebsite.dto.OrderItemDTO;
 import org.stevenguyendev.pcshopwebsite.dto.mapper.OrderDTOMapper;
 import org.stevenguyendev.pcshopwebsite.dto.mapper.OrderItemDTOMapper;
 import org.stevenguyendev.pcshopwebsite.exception.ResourceNotFoundException;
@@ -16,6 +17,7 @@ import org.stevenguyendev.pcshopwebsite.repository.ComputerRepository;
 import org.stevenguyendev.pcshopwebsite.repository.OrderItemRepository;
 import org.stevenguyendev.pcshopwebsite.repository.OrderRepository;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
@@ -39,7 +41,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderDTO placeOrder(OrderDTO orderDto) {
         // TODO refine - findbyreference
         Order order = Order.builder()
-                .orderStatus(OrderStatus.PENDING)
+                .orderStatus(OrderStatus.Pending)
                 .user(userService.getCurrentUser())
                 .additionalNote(orderDto.additionalNote())
                 .receiverName(orderDto.receiverName())
@@ -84,5 +86,10 @@ public class OrderServiceImpl implements OrderService {
     public Collection<OrderDTO> getAllOrdersForUser(UUID userId) {
         User user = userService.getCurrentUser();
         return orderRepository.findAllByUser(user).stream().map(orderDTOMapper).collect(Collectors.toList());
+    }
+
+    @Override
+    public BigDecimal getShippingCost(OrderItemDTO orderItemDTO) {
+        return new BigDecimal(0.00);
     }
 }

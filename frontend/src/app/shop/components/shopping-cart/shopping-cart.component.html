@@ -10,7 +10,7 @@
     </div>
     <div class="cart-body" *ngIf="cartItems$ | async as cartItems; else loadingCart">
         <div class="cart-items-header">
-            <mat-checkbox id="cart-items-header-select"></mat-checkbox>
+            <mat-checkbox id="cart-items-header-select" (change)="headerCheckChange($event)"></mat-checkbox>
             <h3 class="product-header">Product</h3>
             <h3 class="price-header">Price</h3>
             <h3 class="quantity-header">Quantity</h3>
@@ -19,7 +19,7 @@
         </div>
         <ng-container *ngIf="cartItems.length; else emptyCart">
             <div class="cart-item" *ngFor="let item of cartItems">
-                <mat-checkbox class="cart-item-select"></mat-checkbox>
+                <mat-checkbox class="cart-item-select" (change)="selectionChange($event, item)"></mat-checkbox>
                 <div class="cart-item-img">
                     <img [src]="item.computer.thumbnail" [alt]="item.computer.name" onerror="this.onerror=null;this.src='/assets/images/macbookpro14inches.jpg'"/>
                 </div>
@@ -42,9 +42,9 @@
                         </button>
                     </div>
                 </div>
-                <div class="cart-item-sub-total">
+                <!-- <div class="cart-item-sub-total">
                     <h3>{{ item.subTotal | currency }}</h3>
-                </div>
+                </div> -->
                 <div class="cart-item-actions">
                     <button mat-icon-button aria-hidden="false" aria-label="Save"
                     matTooltip="Add computer to wishlist">
@@ -73,7 +73,7 @@
             <h3 class="subtotal-for-checkout">${{ subTotal }}</h3>
             <button mat-flat-button 
                 color="accent" 
-                class="proceed-checkout-btn"
+                class="proceed-checkout-btn" (click)="proceedCheckout()"
                 [routerLink]="['/shop/checkout']">Proceed to checkout</button>
         </div>
     </div>

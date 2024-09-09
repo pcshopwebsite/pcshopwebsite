@@ -9,6 +9,11 @@ import { AppConfigService } from './core/services/app-config.service';
 import { CoreModule } from './core/core.module';
 import { AddHeaderInterceptor } from './core/interceptor/add-header.interceptor';
 import { LogResponseInterceptor } from './core/interceptor/log-response.interceptor';
+// import filepond module
+import { FilePondModule, registerPlugin } from 'ngx-filepond';
+// import and register filepond file type validation plugin
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+registerPlugin(FilePondPluginFileValidateType);
 
 export function appInitializer(appConfigService: AppConfigService) {
   return () => {
@@ -25,7 +30,8 @@ export function appInitializer(appConfigService: AppConfigService) {
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
-    CoreModule
+    CoreModule,
+    FilePondModule,
   ],
   providers: [
     {

@@ -16,3 +16,12 @@ spring:
     url: jdbc:postgresql://localhost:5332/pcshop
     username: stevenguyendev
     password: password
+storage:
+  location: /Users/stevenguyen/upload
+  temp-location: /Users/stevenguyen/upload-temp
+logging:
+  level:
+    org:
+      springframework: INFO
+      stevenguyendev:
+        pcshopwebsite: DEBUG

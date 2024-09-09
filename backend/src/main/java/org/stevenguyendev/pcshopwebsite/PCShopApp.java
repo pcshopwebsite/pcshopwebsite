@@ -20,6 +20,16 @@ public class PCShopApp {
         SpringApplication.run(PCShopApp.class, args);
     }
 
+//     @Bean
+// 	public WebMvcConfigurer corsConfigurer() {
+// 		return new WebMvcConfigurer() {
+// 			@Override
+// 			public void addCorsMappings(CorsRegistry registry) {
+// 				registry.addMapping("/api/upload").allowedOrigins("http://localhost:4200");
+// 			}
+// 		};
+// 	}
+
     @Bean
     @Profile({"dev", "local", "default"})
     CommandLineRunner runner(
@@ -27,12 +37,14 @@ public class PCShopApp {
             BrandRepository brandRepository,
             CategoryRepository categoryRepository,
             UserRepository userRepository,
-            CartRepository cartRepository
+            CartRepository cartRepository,
+            OrderItemRepository orderItemRepository,
+            OrderRepository orderRepository
     ) {
         return args -> {
-            cleanUpComputers(computerRepository, brandRepository, categoryRepository);
+            cleanUpComputers(computerRepository, brandRepository, categoryRepository, orderItemRepository);
             addSampleComputers(computerRepository, brandRepository, categoryRepository);
-            cleanUpUsersAndCarts(cartRepository, userRepository);
+            cleanUpUsersAndCarts(cartRepository, userRepository, orderRepository);
             addSampleUsersAndCarts(cartRepository, userRepository);
         };
     }
@@ -45,14 +57,23 @@ public class PCShopApp {
         cartRepository.save(cart);
     }
 
-    private void cleanUpUsersAndCarts(CartRepository cartRepository, UserRepository userRepository) {
+    private void cleanUpUsersAndCarts(
+            CartRepository cartRepository,
+            UserRepository userRepository,
+            OrderRepository orderRepository) {
+        orderRepository.deleteAll();
         cartRepository.deleteAll();
         userRepository.deleteAll();
     }
 
 
 
-    private void cleanUpComputers(ComputerRepository computerRepository, BrandRepository brandRepository, CategoryRepository categoryRepository) {
+    private void cleanUpComputers(
+            ComputerRepository computerRepository,
+            BrandRepository brandRepository,
+            CategoryRepository categoryRepository,
+            OrderItemRepository orderItemRepository) {
+        orderItemRepository.deleteAll();
         computerRepository.deleteAll();
         brandRepository.deleteAll();
         categoryRepository.deleteAll();

@@ -56,13 +56,6 @@ public class Computer extends BaseAuditableEntity {
     )
     private final Set<Media> medias = new HashSet<>();
 
-    @OneToMany(
-            mappedBy = "computer",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private final Set<CartItem> cartItems = new HashSet<>();
-
     public Computer(
             UUID id,
             String name,
@@ -95,16 +88,6 @@ public class Computer extends BaseAuditableEntity {
     public void removeMedia(Media mediaEntity) {
         medias.remove(mediaEntity);
         mediaEntity.setComputer(null);
-    }
-
-    public void addCartItem(CartItem cartItem) {
-        cartItems.add(cartItem);
-        cartItem.setComputer(this);
-    }
-
-    public void removeCartItem(CartItem cartItem) {
-        cartItems.remove(cartItem);
-        cartItem.setComputer(null);
     }
 
     @Override

@@ -1,7 +1,9 @@
 package org.stevenguyendev.pcshopwebsite.service;
 
 import org.stevenguyendev.pcshopwebsite.dto.OrderDTO;
+import org.stevenguyendev.pcshopwebsite.dto.OrderItemDTO;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -15,4 +17,6 @@ public interface OrderService {
     Collection<OrderDTO> getAllOrders();
 
     Collection<OrderDTO> getAllOrdersForUser(UUID userId);
+
+    BigDecimal getShippingCost(OrderItemDTO orderItemDTO);
 }

@@ -15,8 +15,7 @@ public class CartItemDTOMapper implements Function<CartItem, CartItemDTO> {
         }
 
         return new CartItemDTO(
-                cartItem.getId(),
-                new ComputerLiteDTOMapper().apply(cartItem.getComputer()),
+                new ComputerLiteDTOMapper().apply(cartItem.getCartProductPK().getComputer()),
                 cartItem.getQuantity()
         );
     }

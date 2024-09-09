@@ -1,3 +1,9 @@
+.master-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
 a {
     text-decoration: none;
     color: var(var(--primary-color));
@@ -15,11 +21,7 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: sticky;
-    top: 1;
-    left: 0;
-    z-index: 1;
-    width: 100vw;
+    width: 100%;
     height: 64px;
     background-color: var(--secondary-color);
     box-shadow: 2px 3px 2px var(--secondary-darker-color);
@@ -45,7 +47,6 @@ nav {
     .menu-item {
         margin: 0 1rem;
         font-size: 1.2rem;
-        // font-weight: typography.$bold-font;
         cursor: pointer;
         &:hover {
             color: var(--accent-color);
@@ -63,10 +64,13 @@ nav {
     }
 }
 
-.footer-menu {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    height: 2rem;
-
+footer {
+    width: 100%;
+    margin-top: auto;
+    .footer-menu {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        height: 2rem;
+    }
 }

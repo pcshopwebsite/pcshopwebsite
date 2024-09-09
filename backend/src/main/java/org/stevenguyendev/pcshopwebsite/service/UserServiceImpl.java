@@ -27,7 +27,11 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserDTO addUser(UserDTO userDTO) {
-        User user = User.builder().name(userDTO.name()).email(userDTO.email()).build();
+        User user = User.builder()
+                .name(userDTO.name())
+                .email(userDTO.email())
+                .password(userDTO.password())
+                .build();
         user = userRepository.save(user);
         Cart newCart = new Cart();
         newCart.setUser(user);
@@ -44,6 +48,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public void deleteUser(UUID userId) {
+        cartRepository.deleteById(userId);
         userRepository.deleteById(userId);
     }
 

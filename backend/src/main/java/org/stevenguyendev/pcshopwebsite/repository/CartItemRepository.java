@@ -5,8 +5,9 @@ import org.stevenguyendev.pcshopwebsite.model.CartItem;
 
 import java.util.UUID;
 
-public interface CartItemRepository extends JpaRepository<CartItem, UUID> {
-    CartItem findCartItemByCartIdAndComputerId(UUID cartId, UUID computerId);
-    CartItem findCartItemById(UUID cartItemId);
-    void deleteCartItemByCartIdAndComputerId(UUID cartId, UUID computerId);
+public interface CartItemRepository extends JpaRepository<CartItem, CartItem.CartProductPK> {
+    CartItem findByCartProductPK(CartItem.CartProductPK cartProductPK);
+    CartItem findByCartProductPK_CartIdAndCartProductPK_ComputerId(UUID cartId, UUID computerId);
+    void deleteByCartProductPK(CartItem.CartProductPK cartProductPK);
+    void deleteByCartProductPK_CartIdAndCartProductPK_ComputerId(UUID cartId, UUID computerId);
 }

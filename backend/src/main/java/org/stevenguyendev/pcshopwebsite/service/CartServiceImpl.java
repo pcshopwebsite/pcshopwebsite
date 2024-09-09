@@ -63,7 +63,7 @@ public class CartServiceImpl implements CartService {
     ) {
         Cart cartEntity = getCart(updateRequest.cartId());
         if (updateRequest.action() == CartUpdateAction.UPDATE) {
-            CartItem cartItem = cartItemRepository.findCartItemByCartIdAndComputerId(
+            CartItem cartItem = cartItemRepository.findByCartProductPK_CartIdAndCartProductPK_ComputerId(
                     updateRequest.cartId(),
                     updateRequest.computerId()
             );
@@ -73,23 +73,23 @@ public class CartServiceImpl implements CartService {
             cartItem.setQuantity(updateRequest.quantity());
             cartItemRepository.save(cartItem);
         } else if (updateRequest.action() == CartUpdateAction.REMOVE) {
-            cartItemRepository.deleteCartItemByCartIdAndComputerId(
+            cartItemRepository.deleteByCartProductPK_CartIdAndCartProductPK_ComputerId(
                     updateRequest.cartId(),
                     updateRequest.computerId()
             );
         } else if (updateRequest.action() == CartUpdateAction.ADD) {
-            CartItem cartItem = cartItemRepository.findCartItemByCartIdAndComputerId(
+            CartItem cartItem = cartItemRepository.findByCartProductPK_CartIdAndCartProductPK_ComputerId(
                     updateRequest.cartId(),
                     updateRequest.computerId()
             );
             if (cartItem == null) {
                 cartItem = new CartItem();
-                cartItem.setCart(cartEntity);
+                cartItem.getCartProductPK().setCart(cartEntity);
                 Optional<Computer> computerEntity = computerRepository.findById(updateRequest.computerId());
                 if (computerEntity.isEmpty()) {
                     throw new ResourceNotFoundException("Computer not found for id " + updateRequest.computerId());
                 }
-                cartItem.setComputer(computerEntity.get());
+                cartItem.getCartProductPK().setComputer(computerEntity.get());
                 cartItem.setQuantity(updateRequest.quantity());
                 cartItemRepository.save(cartItem);
             } else {

@@ -16,8 +16,10 @@ public class OrderItem {
     @EmbeddedId
     private OrderProductPK orderProduct;
 
+    @Column(nullable = false)
     private Integer quantity;
 
+    @Column(nullable = false)
     private BigDecimal price;
 
     public OrderItem(
@@ -38,13 +40,12 @@ public class OrderItem {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof OrderItem orderItem)) return false;
-        if (!super.equals(o)) return false;
         return Objects.equals(orderProduct, orderItem.orderProduct) && Objects.equals(quantity, orderItem.quantity) && Objects.equals(price, orderItem.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), orderProduct, quantity, price);
+        return Objects.hash(orderProduct, quantity, price);
     }
 
     @Override
@@ -53,7 +54,7 @@ public class OrderItem {
                 "orderProduct=" + orderProduct +
                 ", quantity=" + quantity +
                 ", price=" + price +
-                "} " + super.toString();
+                '}';
     }
 
     @Embeddable

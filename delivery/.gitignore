@@ -1,0 +1,5 @@
+
+# IDEs & editors
+/.idea
+.vscode
+.DS_Store

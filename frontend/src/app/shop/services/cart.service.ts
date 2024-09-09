@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { ComputerDto } from '../models/computer-dto';
 import { Observable, map, tap } from 'rxjs';
 import { AppConfigService } from 'src/app/core/services/app-config.service';
@@ -11,20 +11,13 @@ import { CartItemDto } from '../models/cart-item-dto';
 })
 export class CartService {
   private readonly cartUrl = `${AppConfigService.settings.api.baseUrl}/${AppConfigService.settings.api.cartUrl}`;
-  private _cart: CartDto = {} as CartDto;
+  public cartItems = signal<CartItemDto[]>([]);
+  
   constructor(private http: HttpClient) { }
 
-  get cart(): CartDto {
-    return this._cart;
-  }
-
-  set cart(cart: CartDto) {
-    this._cart = cart;
-  }
-  
   findAll() : Observable<CartDto[]> {
     return this.http.get<CartDto[]>(this.cartUrl).pipe(
-      tap((carts: CartDto[]) => this._cart = carts[0])
+      tap((carts: CartDto[]) => this.cartItems.set(carts[0]?.cartItems)),
     );
   }
   findAllCartItemsOfCart(cartId: string): Observable<CartItemDto[] | undefined> {
@@ -33,7 +26,7 @@ export class CartService {
       map((cart: CartDto) => cart.cartItems),
       map((cartItems: CartItemDto[]) => {
         return cartItems.map((cartItem: CartItemDto) => {
-          cartItem.subTotal = cartItem.computer.price * cartItem.quantity;
+          // cartItem.subTotal = cartItem.computer.price * cartItem.quantity;
           return cartItem;
         })
       })
@@ -41,7 +34,7 @@ export class CartService {
   }
   addToCart(_t38: ComputerDto): Observable<CartDto> {
     const addToCartRequest = {
-      cartId: this.cart.id,
+      // cartId: this.cart.id,
       computerId: _t38.id,
       quantity: 1,
       action: 'ADD'
@@ -50,7 +43,7 @@ export class CartService {
   }
   removeFromCart(_t38: ComputerDto): Observable<CartDto> {
     const removeFromCartRequest = {
-      cartId: this.cart.id,
+      // cartId: this.cart.id,
       computerId: _t38.id,
       quantity: 1,
       action: 'REMOVE'

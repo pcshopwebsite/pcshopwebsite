@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.stevenguyendev.pcshopwebsite.dto.OrderDTO;
+import org.stevenguyendev.pcshopwebsite.dto.OrderItemDTO;
 import org.stevenguyendev.pcshopwebsite.service.OrderServiceImpl;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 
 @RestController
@@ -28,5 +30,10 @@ public class OrderController extends BaseController {
     @PutMapping
     public ResponseEntity<OrderDTO> updateOrder(OrderDTO orderDto) {
         return ResponseEntity.ok(orderService.updateOrder(orderDto));
+    }
+
+    @PostMapping("/shipping-cost")
+    public ResponseEntity<BigDecimal> calculateShippingCost(@RequestBody OrderItemDTO orderItemDTO) {
+        return ResponseEntity.ok(orderService.getShippingCost(orderItemDTO));
     }
 }
