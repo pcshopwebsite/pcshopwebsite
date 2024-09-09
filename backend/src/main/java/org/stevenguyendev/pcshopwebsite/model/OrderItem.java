@@ -9,44 +9,77 @@ import java.util.Objects;
 @Entity
 @Table(name = "order_item", schema = "public")
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
-@Builder
-public class OrderItem extends BaseAuditableEntity {
+public class OrderItem {
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
+    @EmbeddedId
+    private OrderProductPK orderProduct;
 
-    @ManyToOne
-    @JoinColumn(name = "computer_id")
-    private Computer product;
-
+    @Column(nullable = false)
     private Integer quantity;
 
+    @Column(nullable = false)
     private BigDecimal price;
 
-    @Override
-    public String toString() {
-        return "OrderItem{" +
-                "order=" + order +
-                ", product=" + product +
-                ", quantity=" + quantity +
-                ", price=" + price +
-                "} " + super.toString();
+    public OrderItem(
+            Order order,
+            Computer product,
+            Integer quantity,
+            BigDecimal price
+    ) {
+        OrderProductPK pk = new OrderProductPK();
+        pk.setOrder(order);
+        pk.setProduct(product);
+        this.orderProduct = pk;
+        this.quantity = quantity;
+        this.price = price;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof OrderItem orderItem)) return false;
-        if (!super.equals(o)) return false;
-        return Objects.equals(order, orderItem.order) && Objects.equals(product, orderItem.product) && Objects.equals(quantity, orderItem.quantity) && Objects.equals(price, orderItem.price);
+        return Objects.equals(orderProduct, orderItem.orderProduct) && Objects.equals(quantity, orderItem.quantity) && Objects.equals(price, orderItem.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), order, product, quantity, price);
+        return Objects.hash(orderProduct, quantity, price);
+    }
+
+    @Override
+    public String toString() {
+        return "OrderItem{" +
+                "orderProduct=" + orderProduct +
+                ", quantity=" + quantity +
+                ", price=" + price +
+                '}';
+    }
+
+    @Embeddable
+    @Getter
+    @Setter
+    public static class OrderProductPK {
+
+        @ManyToOne(fetch = FetchType.LAZY, optional = false)
+        @JoinColumn(name = "order_id")
+        private Order order;
+
+        @ManyToOne(fetch = FetchType.LAZY, optional = false)
+        @JoinColumn(name = "computer_id")
+        private Computer product;
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof OrderProductPK that)) return false;
+            return Objects.equals(order, that.order) && Objects.equals(product, that.product);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(order, product);
+        }
     }
 }

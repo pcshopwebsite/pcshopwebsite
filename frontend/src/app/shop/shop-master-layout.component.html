@@ -1,0 +1,53 @@
+<div class="master-layout">
+    <!-- Nav bar -->
+    <nav id="nav">
+        <div class="hamburger" id="hamburger">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+        <a href="" class="logo">
+            <h1>
+                <span class="pcshop">PCShop</span><span>👍</span>
+            </h1>
+        </a>
+        <div class="search">
+            <input matInput type="text" id="searchInput" placeholder="Macbook pro 14inches M1"/>
+            <button mat-icon-button id="searchSubmit" color="primary">
+                <mat-icon>search</mat-icon>
+            </button>
+        </div>
+        <ul class="menu">
+            <li class="menu-item">
+                <button mat-icon-button arial-hidden="false" color="accent" aria-label="Chat">
+                    <mat-icon>chat</mat-icon>
+                </button>
+            </li>
+            <li class="menu-item">
+                <button mat-icon-button arial-hidden="false" 
+                    color="accent" aria-label="Shopping cart"
+                    [routerLink]="['/shop/cart']">
+                    <mat-icon>shopping_cart</mat-icon>
+                </button>
+            </li>
+        </ul>
+    </nav>
+    <router-outlet></router-outlet>
+    <!--Footer-->
+    <footer>
+        <ul class="footer-menu">
+            <li>
+                <a href="#">Home</a>
+            </li>
+            <li>
+                <a href="">Categories</a>
+            </li>
+            <li>
+                <a href="">Shops</a>
+            </li>
+            <li>
+                <a href="">Account</a>
+            </li>
+        </ul>
+    </footer>
+</div>

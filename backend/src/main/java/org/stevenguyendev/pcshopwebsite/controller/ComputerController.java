@@ -9,17 +9,18 @@ import org.stevenguyendev.pcshopwebsite.dto.ComputerFilterRequest;
 import org.stevenguyendev.pcshopwebsite.dto.ComputerSort;
 import org.stevenguyendev.pcshopwebsite.service.ComputerService;
 
+import java.util.Collection;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/computers")
 @CrossOrigin("*")
 @AllArgsConstructor
-public class ComputerController {
+public class ComputerController extends BaseController {
     private final ComputerService computerService;
 
     @GetMapping
-    public List<ComputerLiteDTO> getAllComputers(
+    public ResponseEntity<Collection<ComputerLiteDTO>> getAllComputers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "50") int size,
             @RequestParam(required = false) String name,
@@ -53,17 +54,12 @@ public class ComputerController {
                 page,
                 size
         );
-        return computerService.filterComputers(filterRequest);
+        return ResponseEntity.ok(computerService.filterComputers(filterRequest));
     }
 
     @GetMapping("/{idOrName}")
     public ResponseEntity<ComputerDTO> getComputerByIdOrName(@PathVariable String idOrName) {
-        ComputerDTO computer = computerService.findComputerByIdOrName(idOrName);
-        if (computer != null) {
-            return ResponseEntity.ok(computer);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(computerService.findComputerByIdOrName(idOrName));
     }
 
     @PostMapping

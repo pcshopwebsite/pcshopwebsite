@@ -1,16 +1,20 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-import { ComputerListComponent } from "./shop/components/computer-list/computer-list.component";
+import { FileUploadComponent } from "./file-upload/file-upload.component";
 
 const routes: Routes = [
     {
         path: '',
-        redirectTo: 'computers',
+        redirectTo: 'shop',
         pathMatch: 'full'
     },
     {
-        path: 'computers',
-        component: ComputerListComponent
+        path: 'shop',
+        loadChildren: () => import('./shop/shop.module').then(m => m.ShopModule)
+    },
+    {
+        path: 'file-upload',
+        component: FileUploadComponent
     }
 ];
 

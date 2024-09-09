@@ -12,16 +12,16 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/users")
 @AllArgsConstructor
-public class UserController {
+public class UserController extends BaseController {
     private final UserService userService;
     @GetMapping
-    public Collection<UserDTO> getAllUsers() {
-        return this.userService.getAllUsers();
+    public ResponseEntity<Collection<UserDTO>> getAllUsers() {
+        return ResponseEntity.ok(this.userService.getAllUsers());
     }
 
     @GetMapping("/{userId}")
-    public UserDTO getUser(@PathVariable UUID userId) {
-        return this.userService.getUser(userId);
+    public ResponseEntity<UserDTO> getUser(@PathVariable UUID userId) {
+        return ResponseEntity.ok(this.userService.getUser(userId));
     }
 
     @PostMapping

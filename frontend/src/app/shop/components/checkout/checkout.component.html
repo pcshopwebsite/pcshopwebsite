@@ -1,0 +1,115 @@
+<section class="checkout-container">
+    <mat-stepper linear>
+        <mat-step [stepControl]="shippingForm">
+            <form [formGroup]="shippingForm">
+                <ng-template matStepLabel>Shipping</ng-template>
+                <mat-form-field>
+                    <mat-label>Name</mat-label>
+                    <input matInput formControlName="receiverName" placeholder="John Doe">
+                </mat-form-field>
+            
+                <mat-form-field>
+                    <mat-label>Phone number</mat-label>
+                    <input type="tel" matInput formControlName="receiverPhone" placeholder="0389946663">
+                </mat-form-field>
+            
+                <mat-form-field>
+                    <mat-label>Address</mat-label>
+                    <input matInput formControlName="shippingAddress" placeholder="75/25 Tan Lap">
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>City</mat-label>
+                    <input matInput formControlName="shippingCity" placeholder="Di An">
+                </mat-form-field>
+            
+                <mat-form-field>
+                    <mat-label>Postal code</mat-label>
+                    <input matInput formControlName="shippingPostalCode" placeholder="750000">
+                </mat-form-field>
+            
+                <mat-form-field>
+                    <mat-label>Note</mat-label>
+                    <textarea matInput formControlName="additionalNote" placeholder="Call in advanced"></textarea>
+                </mat-form-field>
+            
+                <button mat-button matStepperNext>Continue to Payment</button>
+            </form>
+        </mat-step>
+        <mat-step [stepControl]="paymentMethodForm">
+            <form [formGroup]="paymentMethodForm">
+                <ng-template matStepLabel>Payment</ng-template>
+                <mat-radio-group formControlName="paymentMethod">
+                    <mat-radio-button value="cash">Cash</mat-radio-button>
+                    <mat-radio-button value="momo" disabled>Momo</mat-radio-button>
+                    <mat-radio-button value="credit_card" disabled>Credit Card</mat-radio-button>
+                    <mat-radio-button value="paypal" disabled>Paypal</mat-radio-button>
+                </mat-radio-group>
+                <button mat-button matStepperNext>Continue to review</button>
+            </form>
+        </mat-step>
+        <mat-step label="Review">
+            <div class="summary">
+                <div class="shipping-summary">
+                    <h3>Shipping address</h3>
+                    <p>
+                        <!--Receiver name-->
+                        {{shippingForm.value.receiverName}}
+                    </p>
+                    <p>
+                        <!--Receiver phone number-->
+                        {{shippingForm.value.receiverPhone}}
+                    </p>
+                    <p>
+                        <!--Shipping address-->
+                        {{shippingForm.value.shippingAddress}}
+                    </p>
+                    <p>
+                        <!--Shipping city-->
+                        {{shippingForm.value.shippingCity}}
+                    </p>
+                    <p>
+                        <!--Shipping postal code-->
+                        {{shippingForm.value.shippingPostalCode}}
+                    </p>
+                </div>
+                <div class="payment-method-summary">
+                    <h3>Payment method</h3>
+                    <p>
+                        <!--Payment method details-->
+                        {{paymentMethodForm.value.paymentMethod}}
+                    </p>
+                </div>
+                <div class="order-totals">
+                    <h2>Order Summary</h2>
+                    <div class="row">
+                        <span>Item(s) total</span>
+                        <span>
+                            <!--Items total-->
+                        </span>
+                    </div>
+                    <div class="row">
+                        <span>Shipping</span>
+                        <span>
+                            <!--Shipping fee-->
+                        </span>
+                    </div>
+                    <div class="row">
+                        <span>Tax</span>
+                        <span>
+                            <!--Tax (0)-->
+                        </span>
+                    </div>
+                    <div class="row order-total">
+                        <span>Order total (n items)</span>
+                        <span>
+                            <!--Order total-->
+                        </span>
+                    </div>
+                    <button type="submit">Submit your order</button>
+                    <h5>By clicking submit your order, you agree to our ToS and Privacy Policy</h5>
+                </div>
+            </div>
+        </mat-step>
+    </mat-stepper>
+</section>

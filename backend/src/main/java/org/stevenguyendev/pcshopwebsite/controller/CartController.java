@@ -4,32 +4,37 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.stevenguyendev.pcshopwebsite.dto.CartDTO;
 import org.stevenguyendev.pcshopwebsite.dto.mapper.CartDTOMapper;
-import org.stevenguyendev.pcshopwebsite.service.CartService;
+import org.stevenguyendev.pcshopwebsite.service.CartServiceImpl;
 import org.stevenguyendev.pcshopwebsite.dto.CartUpdateRequest;
 
+import java.util.Collection;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/carts")
-public class CartController {
+@CrossOrigin(origins = "http://localhost:4200")
+public class CartController extends BaseController {
 
-    private final CartService cartService;
-    private final CartDTOMapper cartDTOMapper;
+    private final CartServiceImpl cartService;
     public CartController(
-            CartService cartService,
-            CartDTOMapper cartDTOMapper) {
+            CartServiceImpl cartService) {
         this.cartService = cartService;
-        this.cartDTOMapper = cartDTOMapper;
     }
+
+    @GetMapping
+    public ResponseEntity<Collection<CartDTO>> getAllCarts() {
+        return ResponseEntity.ok(cartService.getAllCarts());
+    }
+
     @GetMapping("/{cartId}")
     public ResponseEntity<CartDTO> getCart(@PathVariable UUID cartId)
     {
-        return ResponseEntity.ok(cartDTOMapper.apply(cartService.getCart(cartId)));
+        return ResponseEntity.ok(cartService.getCartForUser(cartId));
     }
 
     @PutMapping
     public ResponseEntity<CartDTO> updateCart(@RequestBody CartUpdateRequest updateRequest)
     {
-        return ResponseEntity.ok(cartDTOMapper.apply(cartService.updateCart(updateRequest)));
+        return ResponseEntity.ok(cartService.updateCart(updateRequest));
     }
 }
